@@ -12,12 +12,12 @@ class CustomDropdownButton2<T> extends StatelessWidget {
     required this.dropdownItems,
     required this.onChanged,
     this.selectedItemBuilder,
+    //this.buttonDecoration,
     this.hintAlignment,
     this.valueAlignment,
     this.buttonHeight,
     this.buttonWidth,
     this.buttonPadding,
-    this.buttonDecoration,
     this.buttonElevation,
     this.icon,
     this.iconSize,
@@ -45,7 +45,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
   final Alignment? valueAlignment;
   final double? buttonHeight, buttonWidth;
   final EdgeInsetsGeometry? buttonPadding;
-  final BoxDecoration buttonDecoration;
+  //final BoxDecoration buttonDecoration;
   final int? buttonElevation;
   final Widget? icon;
   final double? iconSize;
@@ -93,7 +93,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style:  TextStyle(
-                fontSize: 16.0.s,
+                fontSize: 16.0.sp,
                 fontWeight: FontWeight.bold,
                 color: Style.MainTextColor
               ),
@@ -107,7 +107,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
           //height: buttonHeight ?? 40,
          // width: buttonWidth ?? 140,
           padding: EdgeInsets.zero,
-          decoration: buttonDecoration ??
+          decoration:
               BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
                  ),
