@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sizer/sizer.dart';
+import '../Constants/Localization/LanguageDropdown.dart';
 import '../Constants/Localization/ScopeModelWrapper.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Routes/route_constants.dart';
@@ -108,6 +109,14 @@ Container _drawerList(BuildContext context, int id) {
 
                 Drawer_Items(Icons.home_filled, Translations.of(context)!.Home,
                     context, MainRoute),
+                ListTile(
+                    leading:  Icon(Icons.language,size: 3.0.h,color: Style.SecondryColor,),
+                    title: LanguageDropdown(),
+                    ),
+
+
+
+
 /*
                 ScopedModelDescendant<AppModel>(
                   builder: (context, child, model) =>

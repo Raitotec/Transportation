@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:sizer/sizer.dart';
 
+import '../Constants/Localization/LanguageIcon.dart';
 import '../Constants/Localization/ScopeModelWrapper.dart';
 import '../Constants/Routes/route_constants.dart';
 import '../Constants/Style.dart';
@@ -43,7 +44,9 @@ AppBarWithlanguage(BuildContext context, String header) {
                   Navigator.pushNamedAndRemoveUntil(context, MainRoute,(Route<dynamic> r)=>false);
                 },
               )),
-   */ ],
+   */
+      LanguageIconDropdownButton(color: Style.WhiteColor,)
+    ],
   );
 }
 

@@ -5,20 +5,33 @@ class LanguageData {
   static String languageData= "ar";
 }
 
-saveLanguageData(String obj)async
-{
-  final prefs = await SharedPreferences.getInstance();
 
-  prefs.setString("languageData", obj );
-  LanguageData.languageData= obj;
+class LanguageModel {
+  String? id;
+  String? name;
+
+  LanguageModel(this.id, this.name);
+
+  @override
+  String toString() {
+    return name ?? '';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is LanguageModel &&
+              runtimeType == other.runtimeType &&
+              id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
-Future<String> getLanguageData()async
-{
-  final prefs = await SharedPreferences.getInstance();
-  var languageData = prefs.getString('languageData') ?? "ar";
-  LanguageData.languageData= languageData;
-  return languageData;
-}
+List<LanguageModel> languageList = [
+  LanguageModel("ar", "العربية"),
+  LanguageModel("en", "English"),
+  LanguageModel("ur", "اردو"),
+];
 
 

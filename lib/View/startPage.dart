@@ -6,7 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import '../Constants/Localization/LanguageSelector.dart';
+import '../Constants/Localization/LanguageDropdown.dart';
+import '../Constants/Localization/LanguageIcon.dart';
 import '../Constants/Routes/route_constants.dart';
 import '../Constants/assets/Images_Name.dart';
 import 'package:provider/provider.dart';
@@ -79,7 +80,8 @@ class _startPageState extends State<startPage> {
                           child: FadeInAnimation(child: widget),
                         ),
                     children: [
-                      SizedBox(height: 15.0.h,),
+                      LanguageIconDropdownButton(),
+                      SizedBox(height: 10.0.h,),
                       Center(child: Image.asset(
                         ImagesName.logo, height: 15.0.h,),),
                       SizedBox(height: 10.0.h,),
@@ -94,7 +96,21 @@ class _startPageState extends State<startPage> {
                                     onChanged: (text) {},
                                   ));
                           }),
-                      SizedBox(height: 2.0.h,),
+               /* Container(
+                    margin: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 8.0.w),
+                    padding: EdgeInsets.symmetric(vertical: 1.3.h, horizontal: 3.0.w),
+                    decoration: BoxDecoration(
+                      //color: Colors.white.withOpacity(0.2),
+                      border: Border.all(color: Style.BorderTextFieldColor, width: 1.0),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: const Radius.circular(5.0),
+                        topRight: const Radius.circular(5.0),
+                        bottomRight: const Radius.circular(5.0),
+                        bottomLeft: const Radius.circular(5.0),
+                      ),
+                    ),
+                    child:LanguageDropdown()),*/
+                    SizedBox(height: 2.0.h,),
                       Consumer<LoginViewModel>(
                           builder: (context, viewModel, child) {
                             return AnimatedActionColorButton(
@@ -102,7 +118,7 @@ class _startPageState extends State<startPage> {
                                 onTapped: viewModel.startLogin);
                           }),
 
-                      LanguageSelector(),
+
                     ])
             )
         ));

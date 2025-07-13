@@ -34,6 +34,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
     this.scrollbarThickness,
     this.scrollbarAlwaysShow,
     this.offset = Offset.zero,
+    this.textStyle,
     super.key,
   });
   final String hint;
@@ -61,6 +62,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
   final double? scrollbarThickness;
   final bool? scrollbarAlwaysShow;
   final Offset offset;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +77,10 @@ class CustomDropdownButton2<T> extends StatelessWidget {
             hint,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: TextStyle(
+            style: textStyle?? TextStyle(
               fontSize: 16.0.sp,
-              color: Style.GreyColor,
+              color: Style.MainTextColor,
+              fontWeight: FontWeight.bold
             ),
           ),
         ),
@@ -92,7 +95,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
               item.toString(),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style:  TextStyle(
+              style:textStyle??  TextStyle(
                 fontSize: 16.0.sp,
                 fontWeight: FontWeight.bold,
                 color: Style.MainTextColor
@@ -114,7 +117,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
           elevation: buttonElevation,
         ),
         iconStyleData: IconStyleData(
-          icon: Icon(Icons.arrow_drop_down,size: 3.5.h,color: Style.MainColor,),
+          icon:  Icon(Icons.arrow_drop_down,size: 3.5.h,color: Style.MainColor,),
           openMenuIcon: Icon(Icons.arrow_drop_up,size: 3.5.h,color: Style.SecondryColor),
         ),
         dropdownStyleData: DropdownStyleData(
