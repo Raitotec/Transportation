@@ -60,5 +60,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "ExpensesAdd":MessageLookupByLibrary.simpleMessage("اضافة المصروف"),
     "vaildNum":MessageLookupByLibrary.simpleMessage("ادخل رقم صحيح"),
     "invoice_attachment": MessageLookupByLibrary.simpleMessage("مرفق الفاتورة"),
+    "language": MessageLookupByLibrary.simpleMessage("اللغة"),
   };
 }

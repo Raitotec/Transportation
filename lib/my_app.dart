@@ -49,10 +49,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               GlobalCupertinoLocalizations.delegate
                             ],
                             supportedLocales: const [
-                              Locale('ar', ''), // Arabic
-                              Locale('en', ''), // English
+                              Locale("en", "US"),
+                              Locale("ar", "SA"),
+                              Locale('ur', 'PK')
                             ],
-                            debugShowCheckedModeBanner: false,
+                                builder: (context, child) {
+                                  return Directionality(
+                                    textDirection: model.isRTL ? TextDirection.rtl : TextDirection.ltr,
+                                    child: child!,
+                                  );
+                                },  debugShowCheckedModeBanner: false,
                             color: Colors.white,
                             title: "النقليات",
                             onGenerateRoute: CustomRouter.generatedRoute,

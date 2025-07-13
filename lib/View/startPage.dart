@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import '../Constants/Localization/LanguageSelector.dart';
 import '../Constants/Routes/route_constants.dart';
 import '../Constants/assets/Images_Name.dart';
 import 'package:provider/provider.dart';
@@ -101,23 +102,7 @@ class _startPageState extends State<startPage> {
                                 onTapped: viewModel.startLogin);
                           }),
 
-                      ScopedModelDescendant<AppModel>(
-                        builder: (context, child, model) =>
-                            Center(child:  InkWell(
-                                child:  Container(
-                                    padding: EdgeInsets.fromLTRB(5.0.w, 0.5.h, 5.0.w, 0.5.h),
-                                    margin: EdgeInsets.fromLTRB(0, 3.0.h, 0, 1.0.h),
-                                    //  decoration: Style.ButtonDecoration,
-                                    child: Text(
-                                        Translations.of(context)!.Lang,
-                                        style: Style.MainText18Bold
-                                    )),
-                                onTap: () async {
-                                  model.changeDirection();
-                                  Navigator.pushNamed(context, startRoute);
-                                }
-                            )),
-                      ),
+                      LanguageSelector(),
                     ])
             )
         ));

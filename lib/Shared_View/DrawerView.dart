@@ -108,7 +108,7 @@ Container _drawerList(BuildContext context, int id) {
 
                 Drawer_Items(Icons.home_filled, Translations.of(context)!.Home,
                     context, MainRoute),
-
+/*
                 ScopedModelDescendant<AppModel>(
                   builder: (context, child, model) =>
                       ListTile(
@@ -129,7 +129,7 @@ Container _drawerList(BuildContext context, int id) {
 
                       ),
                 ),
-
+*/
                 Drawer_Items(Icons.logout, Translations.of(context)!.logout,
                     context, "loginRoute"),
                 Padding(padding: EdgeInsets.all(1.5.h)),

@@ -7,8 +7,7 @@ import 'language.dart';
 
 class Translations {
   static Future<Translations> load(Locale locale) {
-    final String name =
-    (locale.countryCode != null && locale.countryCode!.isEmpty)
+    final String name = (locale.countryCode != null && locale.countryCode!.isEmpty)
         ? locale.languageCode
         : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
@@ -266,6 +265,11 @@ String get  CompanyNumber {
     return Intl.message(
       'invoice_attachment',
       name: 'invoice_attachment',
+    );
+  }String get language {
+    return Intl.message(
+      'language',
+      name: 'language',
     );
   }
 }

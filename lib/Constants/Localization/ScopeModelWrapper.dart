@@ -17,14 +17,17 @@ class AppModel extends Model {
   Locale _appLocale = Locale('ar');
   Locale get appLocal => _appLocale ;
 
-  void changeDirection() {
-    if (_appLocale == Locale("ar")) {
-      _appLocale = Locale("en");
-      saveLanguageData("en");
-    } else {
-      _appLocale = Locale("ar");
-      saveLanguageData("ar");
-    }
+
+
+  void changeLanguage(String languageCode) {
+    _appLocale = Locale(languageCode);
+    print("Changed language to $languageCode");
+
+    saveLanguageData(languageCode); // لو عندك حفظ في SharedPreferences
+    print("Changed language to $languageCode");
+
     notifyListeners();
   }
+
+  bool get isRTL => ['ar', 'ur'].contains(_appLocale.languageCode);
 }

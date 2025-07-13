@@ -32,7 +32,7 @@ AppBarWithlanguage(BuildContext context, String header) {
           ),
     ),
     actions: <Widget>[
-      ScopedModelDescendant<AppModel>(
+  /*    ScopedModelDescendant<AppModel>(
           builder: (context, child, model) =>
               InkWell(child: Padding(
                 padding: EdgeInsets.fromLTRB(1.5.w, 1.5.h, 1.5.w, 0),
@@ -43,7 +43,7 @@ AppBarWithlanguage(BuildContext context, String header) {
                   Navigator.pushNamedAndRemoveUntil(context, MainRoute,(Route<dynamic> r)=>false);
                 },
               )),
-    ],
+   */ ],
   );
 }
 

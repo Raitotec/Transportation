@@ -60,5 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ExpensesAdd":MessageLookupByLibrary.simpleMessage("Add Expenses"),
     "vaildNum":MessageLookupByLibrary.simpleMessage("Enter a valid number"),
     "invoice_attachment": MessageLookupByLibrary.simpleMessage("Invoice attached"),
+    "language": MessageLookupByLibrary.simpleMessage("language"),
+
   };
 }
