@@ -31,13 +31,16 @@ class CustomRouter {
         }
       case Splash_Route:
         return MaterialPageRoute(builder: (_) => SplashPage());
+      case ExpensesRoute:
+        return MaterialPageRoute(builder: (_) => MainHomeScreen(currentIndex: 1,));
       case MainRoute:
         return MaterialPageRoute(builder: (_) => MainHomeScreen(currentIndex: 0,));
       case startRoute:
         {
           if (CompanyData.companyData != null&& CompanyData.companyData!.baseUrl != null &&
-        DelegateData.delegateData !=null&& DelegateData.delegateData!.name !=null) {
-              return MaterialPageRoute(builder: (_) => HomePage());
+        DelegateData.delegateData !=null&& DelegateData.delegateData!.user !=null
+              && DelegateData.delegateData!.user!.name !=null) {
+              return MaterialPageRoute(builder: (_) => MainHomeScreen(currentIndex: 0,));
             }
             else {
               return  MaterialPageRoute(builder: (_) => startPage());

@@ -24,14 +24,10 @@ class CompanyModel {
     name = json['name'];
     nameEn = json['name_en'];
     logo=json['logo'];
-    baseUrl = json['base_url'];
-    petroStation = json['petrolstation'];
-    market = json['market'];
+    baseUrl = json['maintenance_base_url'];
+
 
     try {
-      pumbs_no = json['pumbs_no'] != null ? json['pumbs_no'] : 0;
-      nozzles_no = json['nozzles_no'] != null ? json['nozzles_no'] : 0;
-      bills_no = json['bills_no'] != null ? json['bills_no'] : 0;
       tax = json['tax'] != null ? json['tax'] : 0;
       taxNumber = json['taxNumber'] != null ? json['taxNumber'] : "";
       address = json['address'] != null ? json['address'] : "";

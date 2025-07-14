@@ -8,8 +8,8 @@ import '../Shared_Data/DelegateData.dart';
 
 Widget ProfileImage()
 {
-  return  (DelegateData.delegateData!.imageUrl == null ||
-      DelegateData.delegateData!.imageUrl!.isEmpty) ?
+  return  (DelegateData.delegateData!.user!.image == null ||
+      DelegateData.delegateData!.user!.image!.isEmpty) ?
   Image(image: AssetImage('lib/assets/profile.png'), height: 6.0.h,) :
   Container(
     //  margin: EdgeInsets.symmetric(horizontal: 10.0.w),
@@ -27,7 +27,7 @@ Widget ProfileImage()
                   size: Size.fromRadius(3.0.h),
                   // Image radius
                   child:
-                  Image.network(DelegateData.delegateData!.imageUrl!,
+                  Image.network(DelegateData.delegateData!.user!.image!,
                     fit: BoxFit.cover,
                     errorBuilder: (context, url, error) => Image(image: AssetImage(
                         'lib/assets/profile.png'), height: 7.0.h,),

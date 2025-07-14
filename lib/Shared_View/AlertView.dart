@@ -15,7 +15,7 @@ AlertView(BuildContext context, String image,  String Title, String Description,
     context: context,
     title: Title,
     desc: Description,
-    image: Image.asset(image, width: 70.0.w, height: 10.0.h,),
+    image: Image.asset("lib/Constants/assets/$image.png", width: 70.0.w, height: 10.0.h,),
     buttons: [
       DialogButton(
         child: Text(
@@ -28,7 +28,7 @@ AlertView(BuildContext context, String image,  String Title, String Description,
           }
           else {
             try {
-              StoreRedirect.redirect(androidAppId: "com.raitotec.manadeb_management.manadeb_management",
+              StoreRedirect.redirect(androidAppId: "com.raitotec.transportation",
                   iOSAppId: "6566010998");
             }
             catch (e) {

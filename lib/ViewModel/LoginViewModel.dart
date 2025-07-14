@@ -8,7 +8,7 @@ import '../Api/LoginApi.dart';
 import '../Shared_View/AlertView.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  LoginApi loginApi= LoginApi();
+
   TextEditingController _companyController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -23,26 +23,26 @@ class LoginViewModel extends ChangeNotifier {
 
   Future<void> Login(BuildContext context) async {
     try {
-      if(_emailController.text == null || _emailController.text.isEmpty)
+      if( _emailController.text.isEmpty)
         {
           AlertView(context, "warning",  Translations.of(context)!.Please,
               Translations.of(context)!.Email_Validation);
           return;
         }
-      if(_passwordController.text == null || _passwordController.text.isEmpty)
+      if( _passwordController.text.isEmpty)
       {
         AlertView(context, "warning",  Translations.of(context)!.Please,
             Translations.of(context)!.Password_Validation);
         return;
       }
-       /*_isLoading = true;
+       _isLoading = true;
         notifyListeners();
-        var res = await loginApi.Login(context, _emailController.text,_passwordController.text);
+        var res = await LoginFun(context, _emailController.text,_passwordController.text);
         _isLoading = false;
         notifyListeners();
-        if (res != null) {*/
+        if (res != null) {
           Navigator.pushNamedAndRemoveUntil(context, MainRoute,(Route<dynamic> r)=>false);
-        //}
+        }
     }
     catch(e)
     {
@@ -54,9 +54,9 @@ class LoginViewModel extends ChangeNotifier {
   Future<void> startLogin(BuildContext context) async {
     try {
       if (_companyController.text != null && _companyController.text.isNotEmpty) {
-       /* _isLoading = true;
+        _isLoading = true;
         notifyListeners();
-        var res = await loginApi.StartToLogin(context, _companyController.text);
+        var res = await StartToLogin(context, _companyController.text);
         _isLoading = false;
         notifyListeners();
         if (res != null) {
@@ -67,10 +67,10 @@ class LoginViewModel extends ChangeNotifier {
                 Translations.of(context)!.LastVersion,
                 id: 1);
           }
-          else {*/
+          else {
               Navigator.pushNamed(context, Login_Route);
-        //  }
-       // }
+          }
+        }
       }
       else {
 
@@ -88,8 +88,8 @@ class LoginViewModel extends ChangeNotifier {
   Future<void> checkVersionFun(BuildContext context)
   async {
     try {
-     // _isLoading=true;
-     // notifyListeners();
+     _isLoading=true;
+      notifyListeners();
       /*
       final _checker = AppVersionChecker();
       var value= await _checker.checkUpdate();

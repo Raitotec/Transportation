@@ -14,8 +14,7 @@ import '../Shared_View/AlertView.dart';
 import 'package:http/http.dart' as http;
 import 'Base_Url.dart';
 
-class LoginApi {
-  Future<DelegateDataModel?> Login(BuildContext context,String email , String password) async {
+  Future<DelegateDataModel?> LoginFun(BuildContext context,String email , String password) async {
     try {
       bool InternetConntected = await hasNetwork();
       if (InternetConntected) {
@@ -101,7 +100,7 @@ class LoginApi {
       if (InternetConntected) {
         try {
 
-          var base_url_data= base_url+id;
+          var base_url_data= base_url+"getcompany/${id}";
           var UriData= Uri.parse(base_url_data);
           print(UriData);
           final response = await http.get(
@@ -121,14 +120,15 @@ class LoginApi {
               return obj;
             }
             else {
-              if (valueMap['error'] != null)
+              if (valueMap['error'] != null) {
                 await AlertView(
                     context, "error", Translations.of(context)!.ErrorTitle,
                     valueMap['error'].toString());
-              else
+              } else {
                 await AlertView(
                     context, "error", Translations.of(context)!.ErrorTitle,
                     valueMap['message'].toString());
+              }
               print( "fn_Login400 ::: ${valueMap['message']} ${valueMap['data']}");
               return null;
             }
@@ -166,5 +166,5 @@ class LoginApi {
       return null;
     }
   }
-}
+
 

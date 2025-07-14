@@ -51,8 +51,8 @@ Container _drawerList(BuildContext context, int id) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: 3.0.h,),
-                  (DelegateData.delegateData!.imageUrl == null ||
-                      DelegateData.delegateData!.imageUrl!.isEmpty) ?
+                  (DelegateData.delegateData!.user!.image == null ||
+                      DelegateData.delegateData!.user!.image!.isEmpty) ?
                   Image(image: AssetImage(ImagesName.logo), width: 100.0.w, height: 12.0.h,) :
                   Center(child:
                   Container(
@@ -71,7 +71,7 @@ Container _drawerList(BuildContext context, int id) {
                                   size: Size.fromRadius(6.0.h),
                                   // Image radius
                                   child:
-                                  Image.network(DelegateData.delegateData!.imageUrl!,
+                                  Image.network(DelegateData.delegateData!.user!.image!,
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, url, error) => Image(image: AssetImage(
                                         ImagesName.logo), width: 100.0.w, height: 12.0.h,),
@@ -84,7 +84,8 @@ Container _drawerList(BuildContext context, int id) {
                   SizedBox(height: 1.0.h,),
                   Center(
                     child: Text(
-                      DelegateData.delegateData != null?  DelegateData.delegateData!.name != null ? DelegateData.delegateData!.name! : " النقليات" : "النقليات ",
+                      ( DelegateData.delegateData != null && DelegateData.delegateData!.user != null) ?  DelegateData.delegateData!.user!.name != null ?
+                      DelegateData.delegateData!.user!.name! : " النقليات" : "النقليات ",
                       style: TextStyle(color: Style.MainTextColor, fontSize: 18.0.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -109,6 +110,8 @@ Container _drawerList(BuildContext context, int id) {
 
                 Drawer_Items(Icons.home_filled, Translations.of(context)!.Home,
                     context, MainRoute),
+                Drawer_Items(Icons.account_balance_wallet, Translations.of(context)!.Expenses,
+                    context, ExpensesRoute),
                 ListTile(
                     leading:  Icon(Icons.language,size: 3.0.h,color: Style.SecondryColor,),
                     title: LanguageDropdown(),

@@ -1,4 +1,4 @@
 
-const String base_url = "https://tasks.raitotec.com/api/getcompany/";
-const String login = "Delegate/LogIn";
+const String base_url = "https://tasks.raitosystem.com/api/";
+const String login = "login";
 const String startTologin = "getcompany";
