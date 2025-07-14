@@ -163,7 +163,9 @@ import '../ViewModel/HomeViewModel.dart';
 
 Widget ListData(List<Requests> lst) {
   if (lst != null && lst.length > 0) {
-    return _ListView(lst);
+    return Consumer<HomeViewModel>(
+        builder: (context, viewModel, child) {
+          return RefreshIndicator(child: _ListView(lst), onRefresh:()=> viewModel.Refresh(context));}) ;
   } else {
     return Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {

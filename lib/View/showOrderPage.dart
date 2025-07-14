@@ -151,9 +151,9 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                           viewModel.currentRequest!.loadingPermissionAttachments!)))
                 ],
               ),
-            if(viewModel.value != 2 )
+            if(viewModel.value == 0 )
               SpaceRow(),
-            if(viewModel.value != 2 )
+            if(viewModel.value == 0 )
               Row(mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -174,9 +174,9 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                     ShowImages(
                         viewModel.images_load, viewModel.images_path_load),
                   ]),
-            if(viewModel.value != 2 )
+            if(viewModel.value == 0 )
               SpaceRow(),
-            if(viewModel.value != 2 )
+            if(viewModel.value == 0 )
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

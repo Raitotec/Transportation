@@ -129,7 +129,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
     try
     {
-     GetData(context);
+     await GetData(context);
     }
     catch(e)
     {
@@ -308,7 +308,7 @@ _SelectedPaymentMethods=value!;
   }
 
   Future<void> show(Requests data,BuildContext context) async{
-    data.order_type_id= value;
+    print('*************'+value.toString());
     _images_load = <File>[];
     _images_path_load=<String>[];
     _images_delivery = <File>[];
