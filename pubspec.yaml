@@ -57,6 +57,8 @@ dependencies:
   #flutter_app_version_checker: ^0.3.2
   geolocator: ^10.1.0
   geolocator_android: 4.6.1
+  path_provider: ^2.1.1
+  path: ^1.8.3
   #flutter_app_version_checker: ^0.3.2
 
 dev_dependencies:

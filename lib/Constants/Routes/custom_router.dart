@@ -21,8 +21,7 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => LoginPage());
       case Show_Order_Route:
         {
-          final args= settings.arguments as Requests;
-          return MaterialPageRoute(builder: (_) => ShowOrderPage(data: args));
+          return MaterialPageRoute(builder: (_) => ShowOrderPage());
         }
       case Show_Expenses_Route:
         {

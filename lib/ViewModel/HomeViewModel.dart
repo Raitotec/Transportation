@@ -17,6 +17,8 @@ import '../Models/OrderModel.dart';
 import '../Models/PaymentMethodsData.dart';
 import '../Shared_Data/formatDateTime.dart';
 import '../Shared_View/AlertView.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 class HomeViewModel extends ChangeNotifier {
 
@@ -51,9 +53,12 @@ class HomeViewModel extends ChangeNotifier {
   TextEditingController _AmountController = TextEditingController();
   TextEditingController get AmountController => _AmountController;
   List<File> _images_invoice = <File>[];
+
   List<File> get images_invoice => _images_invoice;
   List <String> _images_path_invoice=<String>[];
   List<String> get images_path_invoice => _images_path_invoice;
+  Requests? _currentRequest;
+  Requests? get currentRequest => _currentRequest;
 
   Future<void> GetData(BuildContext context) async {
     checkVersionFun(context);
@@ -137,9 +142,6 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUIAfterDataFetch() async {
-    notifyListeners();
-  }
 
 
   void onChangeSlider(BuildContext context, int i)
@@ -210,12 +212,8 @@ class HomeViewModel extends ChangeNotifier {
       _isLoading=true;
       notifyListeners();
       ImagePicker _picker = ImagePicker();
-      //  images_path = <String>[];
-      //  images= <File>[];
-      // Pick multiple images
       XFile? resultList = await _picker.pickImage(source: ImageSource.camera);
       print(resultList!.path);
-      //  for (var item in resultList) {
       var compress_File = await compressFile(File(resultList!.path));
       if(load==true) {
         print("&&&&");
@@ -239,37 +237,39 @@ class HomeViewModel extends ChangeNotifier {
       print("************* "+e.toString());
     }
   }
-  Future<XFile?> compressFile(File file) async {
-    final filePath = file.absolute.path;
-    final lastIndex = filePath.lastIndexOf('.');
-    final splitted = filePath.substring(0, (lastIndex));
-    final outPath = "${splitted}_out_${DateTime.now().day}${DateTime.now().month}${DateTime.now().year}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}${filePath.substring(lastIndex)}";
-    print("***** "+outPath);
-    print(filePath.substring(lastIndex).toString());
-    var result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path, outPath,
+
+
+  Future<File?> compressFile(File file) async {
+    try {
+      final filePath = file.absolute.path;
+      final lastIndex = filePath.lastIndexOf('.');
+      final extension = filePath.substring(lastIndex + 1);
+      final outPath = "${filePath.substring(0, lastIndex)}_out_${DateTime.now().millisecondsSinceEpoch}.$extension";
+
+      final compressed = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        outPath,
         quality: 25,
-        format: filePath.substring(lastIndex).toString().contains("png")?CompressFormat.png:CompressFormat.jpeg
-    );
-    print('before');
-    print(file.lengthSync());
-    print(file.path);
-    print(file.absolute.path);
-    print('after');
-    print(result!.length().toString());
-    print(result.path);
-    return result;
+        format: extension.toLowerCase().contains("png") ? CompressFormat.png : CompressFormat.jpeg,
+      );
+
+      if (compressed == null) return null;
+
+      // ✅ Move to permanent directory
+      final appDir = await getApplicationDocumentsDirectory();
+      final savedPath = join(appDir.path, basename(compressed.path));
+      File compressedFile = File(compressed.path);
+      File savedFile = await compressedFile.copy(savedPath);
+
+
+      return savedFile;
+    } catch (e) {
+      print("Error compressing file: $e");
+      return null;
+    }
   }
 
-  sendRequest(Requests data, BuildContext context) async {
-    _isLoading=true;
-    notifyListeners();
-    await AlertView(context,ImagesName.success,
-        Translations.of(context)!.Ok,
-        Translations.of(context)!.success);
-    _isLoading=false;
-    notifyListeners();
-  }
+
 
   Future<void> addMoney(Requests data, BuildContext context) async {
     _isLoading=true;
@@ -307,10 +307,58 @@ _SelectedPaymentMethods=value!;
     notifyListeners();
   }
 
-  show(Requests data,BuildContext context) {
+  Future<void> show(Requests data,BuildContext context) async{
     data.order_type_id= value;
+    _images_load = <File>[];
+    _images_path_load=<String>[];
+    _images_delivery = <File>[];
+    _images_path_delivery=<String>[];
+    _currentRequest=data;
     notifyListeners();
-    Navigator.pushNamed(context, Show_Order_Route,arguments: data);
+    Navigator.pushNamed(context, Show_Order_Route);
   }
+
+  Future<void> saveRequest( BuildContext context) async {
+    _isLoading=true;
+    notifyListeners();
+    var x= await addRequetFun(context, currentRequest!.id.toString(),images_path_load,images_path_delivery);
+    if(x != null) {
+      _currentRequest = x;
+      _images_load = <File>[];
+      _images_path_load = <String>[];
+      _images_delivery = <File>[];
+      _images_path_delivery = <String>[];
+      notifyListeners();
+      if (value == 0) {
+      var i= CurrentItems.indexWhere((e)=>e.id==x.id);
+      if(i != -1)
+        {
+          CurrentItems[i]= x;
+          notifyListeners();
+        }
+      }
+    }
+    _isLoading=false;
+    notifyListeners();
+  }
+ Future<void> sendRequest( BuildContext context) async {
+    _isLoading=true;
+    notifyListeners();
+
+    var x= await endRequetFun(context, currentRequest!.id.toString(), images_path_load,images_path_delivery);
+    if(x != null)
+    {
+      /*_currentRequest= x;
+      _images_load = <File>[];
+      _images_path_load=<String>[];
+      _images_delivery = <File>[];
+      _images_path_delivery=<String>[];
+      notifyListeners();*/
+      Navigator.pushNamedAndRemoveUntil(context, MainRoute,(Route<dynamic> r)=>false);
+    }
+    _isLoading=false;
+    notifyListeners();
+  }
+
 
 }

@@ -68,9 +68,9 @@ class Requests {
   LoadingSite? loadingSite;
   ClientStation? clientStation;
   int? isClosed;
-  List<Attachments>? loadingRequestAttachments;
-  List<Attachments>? supplierLoadingRequestAttachments;
-  List<Attachments>? loadingPermissionAttachments;
+  List<String>? loadingRequestAttachments;// اذن التحميل
+  List<String>? supplierLoadingRequestAttachments;// ارامكو
+  List<String>? loadingPermissionAttachments;//اذن التسليم
   String? formattedDate;
   String? formattedTime;
   int? order_type_id;//0 current , 1 later, 2 end
@@ -99,16 +99,12 @@ class Requests {
     clientStation = json['clientStation'] != null ? new ClientStation.fromJson(json['clientStation']) : null;
     isClosed = json['is_closed'];
     if (json['loadingRequestAttachments'] != null) {
-      loadingRequestAttachments = <Attachments>[];
-      json['loadingRequestAttachments'].forEach((v) { loadingRequestAttachments!.add(new Attachments.fromJson(v)); });
+      loadingRequestAttachments = json['loadingRequestAttachments'].cast<String>();
     }
     if (json['supplierLoadingRequestAttachments'] != null) {
-      supplierLoadingRequestAttachments = <Attachments>[];
-      json['supplierLoadingRequestAttachments'].forEach((v) { supplierLoadingRequestAttachments!.add(new Attachments.fromJson(v)); });
-    }
+      supplierLoadingRequestAttachments  =json['supplierLoadingRequestAttachments'].cast<String>();}
     if (json['loadingPermissionAttachments'] != null) {
-      loadingPermissionAttachments = <Attachments>[];
-      json['loadingPermissionAttachments'].forEach((v) { loadingPermissionAttachments!.add(new Attachments.fromJson(v)); });
+      loadingPermissionAttachments = json['loadingPermissionAttachments'].cast<String>();
     }
   }
 

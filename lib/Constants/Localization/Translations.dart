@@ -271,5 +271,27 @@ String get  CompanyNumber {
       'language',
       name: 'language',
     );
+  }String get save_request {
+    return Intl.message(
+      'save_request',
+      name: 'save_request',
+    );
+  }
+  String get end_request {
+    return Intl.message(
+      'end_request',
+      name: 'end_request',
+    );
+  } String get aramco_add_attachment {
+    return Intl.message(
+      'aramco_add_attachment',
+      name: 'aramco_add_attachment',
+    );
+  }
+  String get delivery_add_attachment {
+    return Intl.message(
+      'delivery_add_attachment',
+      name: 'delivery_add_attachment',
+    );
   }
 }

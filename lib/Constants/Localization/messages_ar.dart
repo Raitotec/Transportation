@@ -61,5 +61,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "vaildNum":MessageLookupByLibrary.simpleMessage("ادخل رقم صحيح"),
     "invoice_attachment": MessageLookupByLibrary.simpleMessage("مرفق الفاتورة"),
     "language": MessageLookupByLibrary.simpleMessage("اللغة"),
+    "save_request":MessageLookupByLibrary.simpleMessage("حفظ"),
+    "end_request":MessageLookupByLibrary.simpleMessage("إنهاء الطلب"),
+    "aramco_add_attachment": MessageLookupByLibrary.simpleMessage("إضافة مرفق ارمكو "),
+    "delivery_add_attachment": MessageLookupByLibrary.simpleMessage("إضافة مرفق التسليم"),
   };
 }
