@@ -21,21 +21,10 @@ class CompanyModel {
 
   CompanyModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    nameEn = json['name_en'];
-    logo=json['logo'];
-    baseUrl = json['maintenance_base_url'];
-
-
-    try {
-      tax = json['tax'] != null ? json['tax'] : 0;
-      taxNumber = json['taxNumber'] != null ? json['taxNumber'] : "";
-      address = json['address'] != null ? json['address'] : "";
-    }
-    catch (e) {}
-    //   market="0";
-  //  petroStation="1";
-    //logo = "https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg";
+    name = json['name']??"";
+    nameEn = json['name_en']??"";
+    logo=json['logo']??"";
+    baseUrl = json['maintenance_base_url']??"";
 
   }
 

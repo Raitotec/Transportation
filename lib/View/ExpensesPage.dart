@@ -91,7 +91,7 @@ import '../ViewModel/HomeViewModel.dart';
         });
   }
 
-Widget ListData(List<OrderModel> lst,HomeViewModel viewModel) {
+Widget ListData(List<Requests> lst,HomeViewModel viewModel) {
   if (lst != null && lst.length > 0) {
     return _ListView(lst,viewModel);
   } else {
@@ -104,7 +104,7 @@ Widget ListData(List<OrderModel> lst,HomeViewModel viewModel) {
   }
 }
 
-  _ListView(List<OrderModel>  data, HomeViewModel viewModel) {
+  _ListView(List<Requests>  data, HomeViewModel viewModel) {
     return AnimationLimiter(
         child:ListView.builder(
             itemCount: data.length,
@@ -119,7 +119,7 @@ Widget ListData(List<OrderModel> lst,HomeViewModel viewModel) {
             }));
   }
 
-  _tile(OrderModel data,int index, HomeViewModel viewModel) {
+  _tile(Requests data,int index, HomeViewModel viewModel) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
         padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
@@ -132,16 +132,16 @@ Widget ListData(List<OrderModel> lst,HomeViewModel viewModel) {
           Row(
             children: [
               title(Translations.of(context)!.Order_num),
-              des(data.id.toString()),
+              des(data.requestNumber.toString()),
             ],
           ),
           Divider(height: 1.0.h, color: Style.SecondryColor, thickness: 0.5,),
           Row(
             children: [
               title(Translations.of(context)!.date),
-              des(data.date.toString()),
+              des(data.formattedDate.toString()),
               title(Translations.of(context)!.time),
-              Text(data.time.toString(),style:  Style.MainText16,),
+              Text(data.formattedTime.toString(),style:  Style.MainText16,),
             ],
           ),
 

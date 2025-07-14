@@ -28,7 +28,8 @@ import '../Shared_View/_buildLoadingScaffold.dart';
 import '../ViewModel/HomeViewModel.dart';
 
 class ShowOrderPage extends StatefulWidget {
-  final OrderModel data;
+  final Requests data;
+
   ShowOrderPage({required this.data,Key? key}) : super(key: key);
 
   @override
@@ -36,13 +37,13 @@ class ShowOrderPage extends StatefulWidget {
 }
 
 class _ShowOrderPageState extends State<ShowOrderPage> {
-  late Future<void> _dataFuture;
+//  late Future<void> _dataFuture;
 
 
   @override
   void initState() {
     super.initState();
-    _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
+ //   _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
   }
 
   @override
@@ -50,23 +51,8 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
     return Scaffold(
         appBar: AppBarWithBack(context, Translations.of(context)!.send_request),
     drawer: DrawerList(context),
-    body:  FutureBuilder(
-      future: _dataFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return buildLoadingScaffold(
-              context, Translations.of(context)!.send_request);
-        } else if (snapshot.hasError) {
-          return Consumer<HomeViewModel>(
-              builder: (context, viewModel, child)
-              {
-                return NoDataView(onTapped:()=> viewModel.GetData(context));
-              });
-        } else {
-          return MainScaffold(context);
-        }
-      },
-    ));
+    body:  MainScaffold(context)
+    );
   }
 
   Widget MainScaffold(BuildContext context) {
@@ -99,7 +85,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
   }
 
 
-  _tile(OrderModel data, HomeViewModel viewModel) {
+  _tile(Requests data, HomeViewModel viewModel) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 2.0.w),
         padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 2.0.w),
@@ -113,7 +99,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
             children: [
               Icon_Title(Icons.local_shipping_outlined),
               title(Translations.of(context)!.Order_num),
-              des(data.id.toString()),
+              des(data.requestNumber.toString()),
             ],
           ),
           Divider(height: 1.0.h, color: Style.SecondryColor, thickness: 0.5,),
@@ -122,10 +108,10 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
             children: [
               Icon_Title(Icons.calendar_month),
               title(Translations.of(context)!.date),
-              des(data.date.toString()),
+              des(data.formattedDate.toString()),
               Icon_Title(Icons.timer_outlined),
               title(Translations.of(context)!.time),
-              Text(data.time.toString(),style:  Style.MainText16,),
+              Text(data.formattedTime.toString(),style:  Style.MainText16,),
             ],
           ),
           SpaceRow(),
@@ -224,7 +210,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
               children: [
                 Expanded(child: InkWell(onTap: () async {
                   await viewModel.getLocation(
-                      data.mapLatitude_load!, data.mapLongitude_load!,
+                      data.loadingSite!.latitude!, data.loadingSite!.longitude!,
                       Translations.of(context)!.load_location);
                 },
                     child: Row(
@@ -238,7 +224,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
           Row(children: [
             Expanded(child: InkWell(onTap: () async {
               await viewModel.getLocation(
-                  data.mapLatitude_delivery!, data.mapLongitude_delivery!,
+                  data.clientStation!.latitude!, data.clientStation!.longitude!,
                   Translations.of(context)!.delivery_location);
             },
                 child: Row(
@@ -381,7 +367,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
     ));
   }
 
-  sureDialog(OrderModel data, HomeViewModel viewModel) {
+  sureDialog(Requests data, HomeViewModel viewModel) {
     return Alert(
       context: context,
       type: AlertType.warning,

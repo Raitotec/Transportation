@@ -31,7 +31,7 @@ import '../Shared_View/dropdown.dart';
 import '../ViewModel/HomeViewModel.dart';
 
   class ShowExpensesPage extends StatefulWidget {
-    final OrderModel data;
+    final Requests data;
     ShowExpensesPage({required this.data,Key? key}) : super(key: key);
   @override
   _ExpensesPageState createState() => _ExpensesPageState();
@@ -102,7 +102,7 @@ import '../ViewModel/HomeViewModel.dart';
         });
   }
 
-  _tile(OrderModel data, HomeViewModel viewModel) {
+  _tile(Requests data, HomeViewModel viewModel) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 2.0.w),
         padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
@@ -125,10 +125,10 @@ import '../ViewModel/HomeViewModel.dart';
             children: [
               Icon_Title(Icons.calendar_month),
               title(Translations.of(context)!.date),
-              des(data.date.toString()),
+              des(data.formattedDate.toString()),
               Icon_Title(Icons.timer_outlined),
               title(Translations.of(context)!.time),
-              Text(data.time.toString(),style:  Style.MainText16,),
+              Text(data.formattedTime.toString(),style:  Style.MainText16,),
             ],
           ),
           SpaceRow(),

@@ -60,6 +60,13 @@ import 'Base_Url.dart';
               return null;
             }
           }
+          else if (response.statusCode == 422) {
+            Map valueMap = jsonDecode(response.body);
+            await AlertView(
+                context, "error", Translations.of(context)!.ErrorTitle,
+                valueMap['message'].toString());
+            return null;
+          }
           else {
             await AlertView(
                 context, "error", Translations.of(context)!.ErrorTitle,
@@ -133,6 +140,13 @@ import 'Base_Url.dart';
               return null;
             }
           }
+          else if (response.statusCode == 422) {
+            Map valueMap = jsonDecode(response.body);
+                await AlertView(
+                    context, "error", Translations.of(context)!.ErrorTitle,
+                    valueMap['message'].toString());
+              return null;
+            }
           else {
             await AlertView(
                 context, "error", Translations.of(context)!.ErrorTitle,

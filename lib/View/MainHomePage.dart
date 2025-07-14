@@ -31,7 +31,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         Icons.home_outlined,
         color: Colors.white,
       ),
-      label:LanguageData.languageData=="ar"?"الطلبات" :'Orders',
+      label:LanguageData.languageData=="ar"?"الطلبات" :LanguageData.languageData=="en"?'Orders':"آرڈرز",
     ),
     NavigationDestination(
       selectedIcon: Icon(
@@ -42,7 +42,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
         Icons.account_balance_wallet_outlined,
         color: Colors.white,
       ),
-      label: LanguageData.languageData=="ar"?"المصروفات" :'Expenses'
+      label: LanguageData.languageData=="ar"?"المصروفات" :LanguageData.languageData=="en"?'Expenses':"اخراجات"
     ),
   ];
 

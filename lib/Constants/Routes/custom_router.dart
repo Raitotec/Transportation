@@ -21,12 +21,12 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => LoginPage());
       case Show_Order_Route:
         {
-          final args= settings.arguments as OrderModel;
+          final args= settings.arguments as Requests;
           return MaterialPageRoute(builder: (_) => ShowOrderPage(data: args));
         }
       case Show_Expenses_Route:
         {
-          final args= settings.arguments as OrderModel;
+          final args= settings.arguments as Requests;
           return MaterialPageRoute(builder: (_) => ShowExpensesPage(data: args));
         }
       case Splash_Route:

@@ -8,7 +8,9 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sizer/sizer.dart';
+import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Constants/assets/Images_Name.dart';
+import '../Api/OrderApi.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Models/OrderModel.dart';
@@ -20,12 +22,12 @@ class HomeViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   bool _checkVersion = false;
-  List<OrderModel> _CurrentItems = <OrderModel>[];
-  List<OrderModel> get CurrentItems => _CurrentItems;
-  List<OrderModel> _LaterItems = <OrderModel>[];
-  List<OrderModel> get LaterItems => _LaterItems;
-  List<OrderModel> _EndItems = <OrderModel>[];
-  List<OrderModel> get EndItems => _EndItems;
+  List<Requests> _CurrentItems = <Requests>[];
+  List<Requests> get CurrentItems => _CurrentItems;
+  List<Requests> _LaterItems = <Requests>[];
+  List<Requests> get LaterItems => _LaterItems;
+  List<Requests> _EndItems = <Requests>[];
+  List<Requests> get EndItems => _EndItems;
   int _value = 0;
   List<int> _slider = [0, 1,2];
   CarouselSliderController _controller = CarouselSliderController();
@@ -62,42 +64,26 @@ class HomeViewModel extends ChangeNotifier {
      _images_path_delivery=<String>[];
    try
    {
-     _CurrentItems=[OrderModel(id: 1, order_type_id:0, name: "current",date: getFormatDate(DateTime.now()),
-     time: await getFormatTimeDateTime(DateTime.now()),
-         mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-         mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),
-       OrderModel(id: 2,name: "current",order_type_id:0,date: getFormatDate(DateTime.now()),
-           time: await getFormatTimeDateTime(DateTime.now()),
-           mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-           mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),
-       OrderModel(id: 3,name: "current",order_type_id:0,date: getFormatDate(DateTime.now()),
-           time: await getFormatTimeDateTime(DateTime.now()),
-           mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-           mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),];
-     _LaterItems=[OrderModel(id: 1,name: "later",order_type_id:1,date: getFormatDate(DateTime.now()),
-    time: await getFormatTimeDateTime(DateTime.now()),
-    mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-    mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),
-       OrderModel(id: 2,name: "later",order_type_id:1,date: getFormatDate(DateTime.now()),
-    time: await getFormatTimeDateTime(DateTime.now()),
-    mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-    mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),
-       OrderModel(id: 3,name: "later",order_type_id:1,date: getFormatDate(DateTime.now()),
-    time: await getFormatTimeDateTime(DateTime.now()),
-    mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-    mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),];
-     _EndItems=[OrderModel(id: 1,name: "end",order_type_id:2,date: getFormatDate(DateTime.now()),
-    time: await getFormatTimeDateTime(DateTime.now()),
-    mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-    mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),
-       OrderModel(id: 2,name: "end",order_type_id:2,date: getFormatDate(DateTime.now()),
-    time: await getFormatTimeDateTime(DateTime.now()),
-    mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-    mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),
-       OrderModel(id: 3,name: "end",order_type_id:2,date: getFormatDate(DateTime.now()),
-    time: await getFormatTimeDateTime(DateTime.now()),
-    mapLatitude_delivery: 30.076032,mapLongitude_delivery: 31.307093,
-    mapLatitude_load: 30.076032,mapLongitude_load: 31.307093),];
+    var x= await GetRequetFun(context);
+    if(x!= null)
+      {
+        if(x.currentRequests != null && x.currentRequests!.isNotEmpty)
+          {
+            _CurrentItems= x.currentRequests!;
+          }
+        if(x.scheduledRequests != null && x.scheduledRequests!.isNotEmpty)
+        {
+          _LaterItems= x.scheduledRequests!;
+        }
+        if(x.pastRequests != null && x.pastRequests!.isNotEmpty)
+        {
+          _EndItems= x.pastRequests!;
+        }
+      }
+    else
+      {
+        _CurrentItems=_LaterItems=_EndItems=[];
+      }
    }
    catch(e)
     {
@@ -208,9 +194,13 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> getLocation(double mapLatitude, double mapLongitude,String text) async
+  Future<void> getLocation(String? mapLatitude, String? mapLongitude,String text) async
   {
-   await  MapsLauncher.launchCoordinates(mapLatitude, mapLongitude,text);
+   var x= double.tryParse(mapLatitude!);
+   var y= double.tryParse(mapLongitude!);
+   if(x != null && y != null) {
+     await MapsLauncher.launchCoordinates(x, y, text);
+   }
   }
 
 
@@ -271,7 +261,7 @@ class HomeViewModel extends ChangeNotifier {
     return result;
   }
 
-  sendRequest(OrderModel data, BuildContext context) async {
+  sendRequest(Requests data, BuildContext context) async {
     _isLoading=true;
     notifyListeners();
     await AlertView(context,ImagesName.success,
@@ -281,7 +271,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addMoney(OrderModel data, BuildContext context) async {
+  Future<void> addMoney(Requests data, BuildContext context) async {
     _isLoading=true;
     notifyListeners();
     await AlertView(context,ImagesName.success,
@@ -315,6 +305,12 @@ _SelectedPaymentMethods=value!;
         _AmountController.text = "";
     }
     notifyListeners();
+  }
+
+  show(Requests data,BuildContext context) {
+    data.order_type_id= value;
+    notifyListeners();
+    Navigator.pushNamed(context, Show_Order_Route,arguments: data);
   }
 
 }

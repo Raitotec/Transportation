@@ -17,14 +17,6 @@ saveCompanyData(CompanyModel obj)async
     prefs.setString("Company_name_en", obj.nameEn!);
     prefs.setString("Company_logo", obj.logo!);
     prefs.setString("Company_base_url", obj.baseUrl!);
-    prefs.setString("Company_petroStation", obj.petroStation!);
-    prefs.setString("Company_market", obj.market!);
-    prefs.setInt("Company_pumbs_no", obj.pumbs_no!);
-    prefs.setInt("Company_nozzles_no", obj.nozzles_no!);
-    prefs.setInt("Company_bills_no", obj.bills_no!);
-    prefs.setString("Company_taxNumber", obj.taxNumber!);
-    prefs.setString("Company_address", obj.address!);
-    prefs.setDouble("Company_tax", obj.tax!);
     CompanyData.companyData = obj;
     //print(CompanyData.companyData!.logo!);
   }
@@ -44,29 +36,13 @@ Future<CompanyModel?> getCompanyData()async
     var Company_logo = prefs.getString('Company_logo') ?? null;
     // var Company_logo = "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&w=1000&q=80";
     var Company_base_url = prefs.getString('Company_base_url') ?? null;
-    var Company_petroStation = prefs.getString('Company_petroStation') ?? null;
-    var Company_market = prefs.getString('Company_market') ?? null;
-    // var Company_base_url = "http://raitotec.net/demo/delegates/api/";
-    var Company_pumbs_no = prefs.getInt('Company_pumbs_no') ?? 0;
-    var Company_nozzles_no = prefs.getInt('Company_nozzles_no') ?? 0;
-    var Company_bills_no = prefs.getInt('Company_bills_no') ?? 0;
-    var Company_taxNumber = prefs.getString('Company_taxNumber') ?? null;
-    var Company_address = prefs.getString('Company_address') ?? null;
-    var Company_tax = prefs.getDouble('Company_tax') ?? 0;
+
 
     CompanyModel obj = new CompanyModel(id: Company_id,
         name: Company_name,
         nameEn: Company_name_en,
         baseUrl: Company_base_url,
-        logo: Company_logo,
-        petroStation: Company_petroStation,
-        market: Company_market,
-        pumbs_no: Company_pumbs_no,
-        nozzles_no: Company_nozzles_no,
-        bills_no: Company_bills_no,
-        tax: Company_tax,
-        address: Company_address,
-        taxNumber: Company_taxNumber);
+        logo: Company_logo,);
     CompanyData.companyData = obj;
     return obj;
   }

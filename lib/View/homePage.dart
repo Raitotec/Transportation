@@ -161,7 +161,7 @@ import '../ViewModel/HomeViewModel.dart';
         });
   }
 
-Widget ListData(List<OrderModel> lst) {
+Widget ListData(List<Requests> lst) {
   if (lst != null && lst.length > 0) {
     return _ListView(lst);
   } else {
@@ -174,7 +174,7 @@ Widget ListData(List<OrderModel> lst) {
   }
 }
 
-  _ListView(List<OrderModel>  data) {
+  _ListView(List<Requests>  data) {
     return AnimationLimiter(
         child:ListView.builder(
             itemCount: data.length,
@@ -189,8 +189,10 @@ Widget ListData(List<OrderModel> lst) {
             }));
   }
 
-  _tile(OrderModel data,int index) {
-    return Container(
+  _tile(Requests data,int index) {
+    return Consumer<HomeViewModel>(
+        builder: (context, viewModel, child) {
+          return  Container(
       margin: EdgeInsets.symmetric(vertical: 0.5.h,horizontal: 2.0.w),
       padding: EdgeInsets.symmetric(vertical: 1.0.h,horizontal: 2.0.w),
       decoration: BoxDecoration(
@@ -202,16 +204,16 @@ Widget ListData(List<OrderModel> lst) {
        Row(
          children: [
            title(Translations.of(context)!.Order_num),
-           des(data.id.toString()),
+           des(data.requestNumber.toString()),
          ],
        ),
         Divider(height: 1.0.h,color: Style.SecondryColor,thickness: 0.5,),
         Row(
           children: [
             title(Translations.of(context)!.date),
-            des(data.date.toString()),
+            des(data.formattedDate.toString()),
             title(Translations.of(context)!.time),
-            Text(data.time.toString(),style:  Style.MainText16,),
+            Text(data.formattedTime.toString(),style:  Style.MainText16,),
           ],
         ),
       SizedBox(height: 1.0.h,),
@@ -220,11 +222,10 @@ Widget ListData(List<OrderModel> lst) {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
           AnimatedButton(text: Translations.of(context)!.show,
-              onTapped: () async {  Navigator.pushNamed(context, Show_Order_Route,
-                  arguments: data!);}),
+              onTapped: () =>viewModel.show(data,context) ),
         ],)
 
-      ],));
+      ],));});
   }
   title(String text)
   {
@@ -234,10 +235,6 @@ Widget ListData(List<OrderModel> lst) {
   {
     return Expanded(child: Text(text,style:  Style.MainText16,));
   }
-
-  sendRRequest(OrderModel data) {}
-
-
 
 
 }
