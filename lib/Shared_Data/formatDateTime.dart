@@ -19,13 +19,12 @@ String getFormatDate(DateTime value)
    return Time;
  }
 
-Future<String> getFormatTimeDateTime(DateTime selectedDate)
-async {
-   await initializeDateFormatting("en_US", null);
-   var now = DateTime.now();
+String getFormatTimeDateTime(DateTime selectedDate) {
+    initializeDateFormatting("en_US", null);
+
    var formatter = DateFormat.Hm('en_US');
    print(formatter.locale);
-   String formatted = formatter.format(now);
+   String formatted = formatter.format(selectedDate);
    print(formatted);
    return formatted;
  }

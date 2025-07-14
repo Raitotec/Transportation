@@ -1,6 +1,8 @@
 
 import 'package:intl/intl.dart';
 
+import '../Shared_Data/formatDateTime.dart';
+
 class OrderModel {
   int? id;
   int? order_type_id;//0 current , 1 later, 2 end
@@ -79,15 +81,13 @@ class Requests {
     requestNumber = json['request_number'];
     requestDateTime = json['request_dateTime']??"";
     try {
-      formattedDate =
-          DateFormat('yyyy-MM-dd').format(DateTime.parse(requestDateTime!));
+      formattedDate =getFormatDate(DateTime.parse(requestDateTime!));
     }
     catch(e)
     {
       formattedDate="";
     } try {
-      formattedTime =
-          DateFormat('hh:mm a').format(DateTime.parse(requestDateTime!));
+      formattedTime = getFormatTimeDateTime(DateTime.parse(requestDateTime!));
     }
     catch(e)
     {
