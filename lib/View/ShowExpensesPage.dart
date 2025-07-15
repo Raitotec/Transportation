@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Models/OrderModel.dart';
+import 'package:transportation/ViewModel/ExpensesViewModel.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
@@ -28,7 +29,6 @@ import '../Shared_View/ProgressIndicatorButton.dart';
 import '../Shared_View/TextFieldNumber.dart';
 import '../Shared_View/_buildLoadingScaffold.dart';
 import '../Shared_View/dropdown.dart';
-import '../ViewModel/HomeViewModel.dart';
 
   class ShowExpensesPage extends StatefulWidget {
 
@@ -50,7 +50,7 @@ import '../ViewModel/HomeViewModel.dart';
     return Scaffold(
         appBar: AppBarWithBack(context, Translations.of(context)!.ExpensesAdd),
         drawer: DrawerList(context),
-        body: Consumer<HomeViewModel>(
+        body: Consumer<ExpensesViewModel>(
       builder: (context, viewModel, child) {
         return  LoadingOverlay(
             isLoading: viewModel.isLoading,
@@ -67,7 +67,7 @@ import '../ViewModel/HomeViewModel.dart';
   }
 
   Widget FormUI() {
-    return Consumer<HomeViewModel>(
+    return Consumer<ExpensesViewModel>(
         builder: (context, viewModel, child) {
           return Column(
               children: [
@@ -193,7 +193,7 @@ import '../ViewModel/HomeViewModel.dart';
     return Expanded(child: Text(text,style:  Style.MainText16,));
   }
 
-  showPaymentMethodsData(HomeViewModel viewModel) {
+  showPaymentMethodsData(ExpensesViewModel viewModel) {
     if( viewModel.MyPaymentMethodsList !=null&& viewModel.MyPaymentMethodsList!.length>0) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 0.0.h, horizontal: 0.0.w),

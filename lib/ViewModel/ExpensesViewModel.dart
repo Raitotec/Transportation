@@ -21,32 +21,24 @@ import '../Shared_View/AlertView.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
-class HomeViewModel extends ChangeNotifier {
+class ExpensesViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   bool _checkVersion = false;
   List<Requests> _CurrentItems = <Requests>[];
   List<Requests> get CurrentItems => _CurrentItems;
-  List<Requests> _LaterItems = <Requests>[];
-  List<Requests> get LaterItems => _LaterItems;
-  List<Requests> _EndItems = <Requests>[];
-  List<Requests> get EndItems => _EndItems;
-  int _value = 0;
-  List<int> _slider = [0, 1,2];
-  CarouselSliderController _controller = CarouselSliderController();
   bool get isLoading => _isLoading;
   bool get checkVersion => _checkVersion;
-  int get value => _value;
-  List<int> get slider => _slider;
-  CarouselSliderController get controller => _controller;
-  List<File> _images_load = <File>[];
-  List<File> get images_load => _images_load;
-  List <String> _images_path_load=<String>[];
-  List<String> get images_path_load => _images_path_load;
-  List<File> _images_delivery = <File>[];
-  List<File> get images_delivery => _images_delivery;
-  List <String> _images_path_delivery=<String>[];
-  List<String> get images_path_delivery => _images_path_delivery;
+  List<PaymentMethodsData> _MyPaymentMethodsList=  <PaymentMethodsData>[];
+  List<PaymentMethodsData> get MyPaymentMethodsList => _MyPaymentMethodsList;
+  PaymentMethodsData? _SelectedPaymentMethods ;
+  PaymentMethodsData? get SelectedPaymentMethods => _SelectedPaymentMethods;
+  TextEditingController _AmountController = TextEditingController();
+  TextEditingController get AmountController => _AmountController;
+  List<File> _images_invoice = <File>[];
+  List<File> get images_invoice => _images_invoice;
+  List <String> _images_path_invoice=<String>[];
+  List<String> get images_path_invoice => _images_path_invoice;
   Requests? _currentRequest;
   Requests? get currentRequest => _currentRequest;
 
@@ -56,38 +48,37 @@ class HomeViewModel extends ChangeNotifier {
     print(StackTrace.current);
     checkVersionFun(context);
     _isLoading = true;
-    _images_load = <File>[];
-    _images_path_load = <String>[];
-    _images_delivery = <File>[];
-    _images_path_delivery = <String>[];
-
+    _SelectedPaymentMethods=null;
+    _AmountController.clear();
+    _images_invoice = <File>[];
+    _images_path_invoice=<String>[];
     try {
       var x = await GetRequetFun(context);
       if (x != null) {
         if (x.currentRequests != null && x.currentRequests!.isNotEmpty) {
           _CurrentItems = x.currentRequests!;
         }
-        if (x.scheduledRequests != null && x.scheduledRequests!.isNotEmpty) {
-          _LaterItems = x.scheduledRequests!;
-        }
-        if (x.pastRequests != null && x.pastRequests!.isNotEmpty) {
-          _EndItems = x.pastRequests!;
-        }
       }
       else {
-        _CurrentItems = _LaterItems = _EndItems = [];
+        _CurrentItems =  [];
       }
     }
     catch (e) {
       _isLoading = false;
     }
+
+    var y = await GetExpenseTypesFun(context);
+    if (y != null && y.isNotEmpty) {
+      _MyPaymentMethodsList = y;
+    }
+
     _isLoading = false;
   }
 
 
   Future<void> Refresh(BuildContext context) async {
     print("*************Refresh");
-   _isLoading=true;
+    _isLoading=true;
     notifyListeners();
     try
     {
@@ -101,25 +92,6 @@ class HomeViewModel extends ChangeNotifier {
 
     _isLoading=false;
     notifyListeners();
-  }
-
-
-
-  void onChangeSlider(BuildContext context, int i)
-  {
-
-      print("***********" + i.toString());
-      _value = i;
-      _controller.animateToPage(value);
-
-    notifyListeners();
-  }
-  void onPageChanged(BuildContext context, int index) {
-    _value = index;
-
-    _isLoading = false;
-    notifyListeners();
-    print(" value = " + value.toString() + " index = " + index.toString());
   }
 
   Future<void> checkVersionFun(BuildContext context)
@@ -157,20 +129,14 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> getLocation(String? mapLatitude, String? mapLongitude,String text) async
-  {
-   var x= double.tryParse(mapLatitude!);
-   var y= double.tryParse(mapLongitude!);
-   if(x != null && y != null) {
-     await MapsLauncher.launchCoordinates(x, y, text);
-   }
-  }
 
 
   Future<void> pickImages(bool load) async {
     try {
 
       _isLoading=true;
+      _images_invoice = <File>[];
+      _images_path_invoice=<String>[];
       notifyListeners();
       ImagePicker _picker = ImagePicker();
       XFile? resultList = await _picker.pickImage(source: ImageSource.camera);
@@ -179,13 +145,11 @@ class HomeViewModel extends ChangeNotifier {
       if(load==true) {
         print("&&&&");
         print(compress_File!.path);
-        _images_load.add(File(compress_File!.path));
-        _images_path_load.add(compress_File.path);
+        _images_invoice.add(File(compress_File!.path));
+        _images_path_invoice.add(compress_File.path);
       }
       else
         {
-          _images_delivery.add(File(compress_File!.path));
-          _images_path_delivery.add(compress_File.path);
         }
       _isLoading=false;
       notifyListeners();
@@ -228,61 +192,58 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-
-
-  Future<void> show(Requests data,BuildContext context) async{
-    print('*************'+value.toString());
-    _images_load = <File>[];
-    _images_path_load=<String>[];
-    _images_delivery = <File>[];
-    _images_path_delivery=<String>[];
-    _currentRequest=data;
-    notifyListeners();
-    Navigator.pushNamed(context, Show_Order_Route);
-  }
-
-  Future<void> saveRequest( BuildContext context) async {
+  Future<void> addMoney(Requests data, BuildContext context) async {
     _isLoading=true;
     notifyListeners();
-    var x= await addRequetFun(context, currentRequest!.id.toString(),images_path_load,images_path_delivery);
-    if(x != null) {
-      _currentRequest = x;
-      _images_load = <File>[];
-      _images_path_load = <String>[];
-      _images_delivery = <File>[];
-      _images_path_delivery = <String>[];
-      notifyListeners();
-      if (value == 0) {
-      var i= CurrentItems.indexWhere((e)=>e.id==x.id);
-      if(i != -1)
-        {
-          CurrentItems[i]= x;
-          notifyListeners();
-        }
+    if(AmountController.text.isNotEmpty&&SelectedPaymentMethods!= null && images_path_invoice.isNotEmpty) {
+      var x = await addExpensesFun(context,
+          currentRequest!.id.toString(), AmountController.text,
+          SelectedPaymentMethods!.id.toString(), images_path_invoice);
+      if (x != null) {
+        Navigator.pushNamedAndRemoveUntil(context, ExpensesRoute, (Route<dynamic> r) => false);
       }
     }
+    else
+      {
+        AlertView(context, "error", Translations.of(context)!.Please,  Translations.of(context)!.enterData);
+      }
     _isLoading=false;
     notifyListeners();
   }
- Future<void> sendRequest( BuildContext context) async {
-    _isLoading=true;
-    notifyListeners();
 
-    var x= await endRequetFun(context, currentRequest!.id.toString(), images_path_load,images_path_delivery);
-    if(x != null)
-    {
-      /*_currentRequest= x;
-      _images_load = <File>[];
-      _images_path_load=<String>[];
-      _images_delivery = <File>[];
-      _images_path_delivery=<String>[];
-      notifyListeners();*/
-      Navigator.pushNamedAndRemoveUntil(context, MainRoute,(Route<dynamic> r)=>false);
+  void setSelectedPaymentMethods(PaymentMethodsData? value) {
+    _SelectedPaymentMethods=value!;
+    notifyListeners();
+  }
+
+  ChangeAmount(String value, BuildContext context) async {
+    if (value.isNotEmpty) {
+      var res = double.tryParse(value);
+      if (res != null && res >0) {
+      }
+      else {
+          _AmountController.text = "";
+        FocusScope.of(context).unfocus();
+        await AlertView(context,  "warning",
+        Translations.of(context)!.please,
+        Translations.of(context)!.vaildNum);
+      }
     }
-    _isLoading=false;
+    else {
+
+        _AmountController.text = "";
+    }
     notifyListeners();
   }
 
-
+  Future<void> showExpensee(Requests data,BuildContext context) async{
+    _images_invoice = <File>[];
+    _images_path_invoice=<String>[];
+    _currentRequest=data;
+    _SelectedPaymentMethods=null;
+    _AmountController.clear();
+    notifyListeners();
+    Navigator.pushNamed(context, Show_Expenses_Route);
+  }
 
 }

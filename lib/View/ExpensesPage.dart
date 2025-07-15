@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Models/OrderModel.dart';
+import 'package:transportation/ViewModel/ExpensesViewModel.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
@@ -24,7 +25,6 @@ import '../Shared_View/NoDataView.dart';
 import '../Shared_View/ProgressIndicatorButton.dart';
 import '../Shared_View/_buildLoadingScaffold.dart';
 import '../Shared_View/dropdown.dart';
-import '../ViewModel/HomeViewModel.dart';
 
   class ExpensesPage extends StatefulWidget {
   @override
@@ -32,37 +32,37 @@ import '../ViewModel/HomeViewModel.dart';
   }
 
   class _ExpensesPageState extends State<ExpensesPage> {
-  //late Future<void> _dataFuture;
+    late Future<void> _dataFuture;
 
   @override
   void initState() {
     super.initState();
-   // _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
+    _dataFuture = Provider.of<ExpensesViewModel>(context, listen: false).GetData(context);
   }
 
   @override
   Widget build(BuildContext context) {
-   /* return  FutureBuilder(
+    return  FutureBuilder(
         future: _dataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return buildLoadingScaffold(
                 context, Translations.of(context)!.Expenses);
           } else if (snapshot.hasError) {
-            return Consumer<HomeViewModel>(
+            return Consumer<ExpensesViewModel>(
               builder: (context, viewModel, child)
             {
               return NoDataView(onTapped:()=> viewModel.GetData(context));
             });
-          } else {*/
+          } else {
            return MainScaffold(context);
-        /*  }
+          }
         },
-          );*/
+          );
   }
 
   Widget MainScaffold(BuildContext context) {
-    return Consumer<HomeViewModel>(
+    return Consumer<ExpensesViewModel>(
       builder: (context, viewModel, child) {
         return  LoadingOverlay(
             isLoading: viewModel.isLoading,
@@ -79,7 +79,7 @@ import '../ViewModel/HomeViewModel.dart';
   }
 
   Widget FormUI() {
-    return Consumer<HomeViewModel>(
+    return Consumer<ExpensesViewModel>(
         builder: (context, viewModel, child) {
           return Column(
               children: [
@@ -91,11 +91,11 @@ import '../ViewModel/HomeViewModel.dart';
         });
   }
 
-Widget ListData(List<Requests> lst,HomeViewModel viewModel) {
+Widget ListData(List<Requests> lst,ExpensesViewModel viewModel) {
   if (lst != null && lst.length > 0) {
-    return _ListView(lst,viewModel);
+    return RefreshIndicator(child: _ListView(lst,viewModel), onRefresh:()=> viewModel.Refresh(context));
   } else {
-    return Consumer<HomeViewModel>(
+    return Consumer<ExpensesViewModel>(
         builder: (context, viewModel, child) {
           return NoDataView(onTapped: () async {
           await viewModel.Refresh(context);
@@ -104,7 +104,7 @@ Widget ListData(List<Requests> lst,HomeViewModel viewModel) {
   }
 }
 
-  _ListView(List<Requests>  data, HomeViewModel viewModel) {
+  _ListView(List<Requests>  data, ExpensesViewModel viewModel) {
     return AnimationLimiter(
         child:ListView.builder(
             itemCount: data.length,
@@ -119,7 +119,7 @@ Widget ListData(List<Requests> lst,HomeViewModel viewModel) {
             }));
   }
 
-  _tile(Requests data,int index, HomeViewModel viewModel) {
+  _tile(Requests data,int index, ExpensesViewModel viewModel) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
         padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
@@ -165,7 +165,7 @@ Widget ListData(List<Requests> lst,HomeViewModel viewModel) {
     return Expanded(child: Text(text,style:  Style.MainText16,));
   }
 
-  showPaymentMethodsData(HomeViewModel viewModel) {
+  showPaymentMethodsData(ExpensesViewModel viewModel) {
     if( viewModel.MyPaymentMethodsList !=null&& viewModel.MyPaymentMethodsList!.length>0) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 0.0.h, horizontal: 0.0.w),

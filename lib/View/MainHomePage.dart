@@ -57,7 +57,10 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     return Scaffold(
       appBar:AppBarWithlanguage(context, navigation[widget.currentIndex].label),
       drawer: DrawerList(context),
-      body: page[widget.currentIndex],
+      body:  IndexedStack(
+      index: widget.currentIndex,
+      children: page,
+    ),
       bottomNavigationBar:
     CurvedNavigationBar(
         height:7.0.h,

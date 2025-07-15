@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:transportation/ViewModel/ExpensesViewModel.dart';
 import 'package:transportation/ViewModel/HomeViewModel.dart';
 
 import 'Constants/Localization/ScopeModelWrapper.dart';
@@ -26,6 +27,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   final GlobalKey<NavigatorState> myNavigatorKey = GlobalKey<NavigatorState>();
+  final homeViewModel = HomeViewModel();
+  final expensesViewModel = ExpensesViewModel();
   @override
   Widget build(BuildContext contextt) {
     return
@@ -37,7 +40,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               providers: [
                                 ChangeNotifierProvider(create: (_) => LoginViewModel()),
                                 ChangeNotifierProvider(create: (_) => UserViewModel()),
-                                ChangeNotifierProvider(create: (_) => HomeViewModel()),
+                                ChangeNotifierProvider.value(value: homeViewModel),
+                                ChangeNotifierProvider.value(value: expensesViewModel),
                               ],
                               child:MaterialApp(
                             navigatorKey: myNavigatorKey,

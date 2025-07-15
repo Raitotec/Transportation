@@ -108,7 +108,7 @@ Container _drawerList(BuildContext context, int id) {
               children: [
                 Padding(padding: EdgeInsets.all(1.0.h)),
 
-                Drawer_Items(Icons.home_filled, Translations.of(context)!.Home,
+                Drawer_Items(Icons.home_filled, Translations.of(context)!.Orders,
                     context, MainRoute),
                 Drawer_Items(Icons.account_balance_wallet, Translations.of(context)!.Expenses,
                     context, ExpensesRoute),
