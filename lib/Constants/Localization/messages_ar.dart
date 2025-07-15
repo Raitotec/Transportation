@@ -65,5 +65,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "end_request":MessageLookupByLibrary.simpleMessage("إنهاء الطلب"),
     "aramco_add_attachment": MessageLookupByLibrary.simpleMessage("إضافة مرفق ارمكو "),
     "delivery_add_attachment": MessageLookupByLibrary.simpleMessage("إضافة مرفق التسليم"),
+    "enterData":MessageLookupByLibrary.simpleMessage("ادخل جميع البيانات"),
   };
 }

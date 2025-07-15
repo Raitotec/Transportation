@@ -25,8 +25,7 @@ class CustomRouter {
         }
       case Show_Expenses_Route:
         {
-          final args= settings.arguments as Requests;
-          return MaterialPageRoute(builder: (_) => ShowExpensesPage(data: args));
+          return MaterialPageRoute(builder: (_) => ShowExpensesPage());
         }
       case Splash_Route:
         return MaterialPageRoute(builder: (_) => SplashPage());

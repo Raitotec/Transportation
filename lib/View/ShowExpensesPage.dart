@@ -31,19 +31,18 @@ import '../Shared_View/dropdown.dart';
 import '../ViewModel/HomeViewModel.dart';
 
   class ShowExpensesPage extends StatefulWidget {
-    final Requests data;
-    ShowExpensesPage({required this.data,Key? key}) : super(key: key);
+
+    ShowExpensesPage({Key? key}) : super(key: key);
   @override
   _ExpensesPageState createState() => _ExpensesPageState();
   }
 
   class _ExpensesPageState extends State<ShowExpensesPage> {
-  late Future<void> _dataFuture;
+
 
   @override
   void initState() {
     super.initState();
-    _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetPaymentData(context);
   }
 
   @override
@@ -51,29 +50,7 @@ import '../ViewModel/HomeViewModel.dart';
     return Scaffold(
         appBar: AppBarWithBack(context, Translations.of(context)!.ExpensesAdd),
         drawer: DrawerList(context),
-        body:  FutureBuilder(
-          future: _dataFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return buildLoadingScaffold(
-                  context, Translations.of(context)!.send_request);
-            }
-            else if (snapshot.hasError) {
-              return Consumer<HomeViewModel>(
-                  builder: (context, viewModel, child)
-                  {
-                    return NoDataView(onTapped:()=> viewModel.GetPaymentData(context));
-                  });
-            }
-            else {
-              return MainScaffold(context);
-            }
-          },
-        ));
-  }
-
-  Widget MainScaffold(BuildContext context) {
-    return Consumer<HomeViewModel>(
+        body: Consumer<HomeViewModel>(
       builder: (context, viewModel, child) {
         return  LoadingOverlay(
             isLoading: viewModel.isLoading,
@@ -86,7 +63,7 @@ import '../ViewModel/HomeViewModel.dart';
                 )
             ));
       },
-    );
+    ));
   }
 
   Widget FormUI() {
@@ -95,112 +72,117 @@ import '../ViewModel/HomeViewModel.dart';
           return Column(
               children: [
                 SizedBox(height: 2.0.h,),
-                _tile(widget.data,viewModel),
-                SizedBox(height: 2.0.h,),
-              ]
-          );
-        });
-  }
-
-  _tile(Requests data, HomeViewModel viewModel) {
-    return Container(
-        margin: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 2.0.w),
-        padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          border: Border.all(color: Style.SecondryColor, width: 0.1.w),
-        ),
-        child: Column(children: [
-          Row(
-            children: [
-              Icon_Title(Icons.local_shipping_outlined),
-              title(Translations.of(context)!.Order_num),
-              des(data.id.toString()),
-            ],
-          ),
-          Divider(height: 1.0.h, color: Style.SecondryColor, thickness: 0.5,),
-          SpaceRow(),
-          Row(
-            children: [
-              Icon_Title(Icons.calendar_month),
-              title(Translations.of(context)!.date),
-              des(data.formattedDate.toString()),
-              Icon_Title(Icons.timer_outlined),
-              title(Translations.of(context)!.time),
-              Text(data.formattedTime.toString(),style:  Style.MainText16,),
-            ],
-          ),
-          SpaceRow(),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon_Title(Icons.account_balance_wallet_outlined),
-                title(Translations.of(context)!.ExpensesKind),
-              Expanded(child:   Container(
-                    decoration:BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      border: Border.all(color: Style.SecondryColor, width: 1.0),
-                      borderRadius: const BorderRadius.only(
-                        topLeft: const Radius.circular(5.0),
-                        topRight: const Radius.circular(5.0),
-                        bottomRight: const Radius.circular(5.0),
-                        bottomLeft: const Radius.circular(5.0),
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        vertical: 1.0.h, horizontal: 1.0.w),
+                Container(
                     margin: EdgeInsets.symmetric(
-                        vertical: 1.0.h, horizontal: 1.0.w),
-                    child: showPaymentMethodsData(viewModel)))
-              ]
-          ),
-          SpaceRow(),
-        Row(children: [
-          Icon_Title(Icons.wallet),
-          title(Translations.of(context)!.amount),
-          Expanded(child: TextFieldNumber(controller:viewModel.AmountController,
-           // label:Translations.of(context)!.amount,
-            onChanged:  (String value) async {
-              await viewModel.ChangeAmount(value,context);
-            }
-            ,textAlign: TextAlign.start,
-            vertical: 1.0.h,
-          ),)
-        ],) ,
-            //padding: EdgeInsets.symmetric(horizontal: 3.0.w),
-          SpaceRow(),
-          Row(mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                    onTap: () async {
-                      await viewModel.pickImages(true);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon_Title(Icons.add_a_photo_outlined),
-                        title(Translations.of(context)!.invoice_attachment),
+                        vertical: 0.5.h, horizontal: 2.0.w),
+                    padding: EdgeInsets.symmetric(
+                        vertical: 1.0.h, horizontal: 2.0.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      border: Border.all(
+                          color: Style.SecondryColor, width: 0.1.w),
+                    ),
+                    child: Column(children: [
+                      Row(
+                        children: [
+                          Icon_Title(Icons.local_shipping_outlined),
+                          title(Translations.of(context)!.Order_num),
+                          des(viewModel.currentRequest!.requestNumber.toString()),
+                        ],
+                      ),
+                      Divider(height: 1.0.h,
+                        color: Style.SecondryColor,
+                        thickness: 0.5,),
+                      SpaceRow(),
+                      Row(
+                        children: [
+                          Icon_Title(Icons.calendar_month),
+                          title(Translations.of(context)!.date),
+                          des(viewModel.currentRequest!.formattedDate.toString()),
+                          Icon_Title(Icons.timer_outlined),
+                          title(Translations.of(context)!.time),
+                          Text(viewModel.currentRequest!.formattedTime.toString(),
+                            style: Style.MainText16,),
+                        ],
+                      ),
+                      SpaceRow(),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon_Title(Icons.account_balance_wallet_outlined),
+                            title(Translations.of(context)!.ExpensesKind),
+                            Expanded(child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  border: Border.all(
+                                      color: Style.SecondryColor, width: 1.0),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: const Radius.circular(5.0),
+                                    topRight: const Radius.circular(5.0),
+                                    bottomRight: const Radius.circular(5.0),
+                                    bottomLeft: const Radius.circular(5.0),
+                                  ),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 1.0.h, horizontal: 1.0.w),
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 1.0.h, horizontal: 1.0.w),
+                                child: showPaymentMethodsData(viewModel)))
+                          ]
+                      ),
+                      SpaceRow(),
+                      Row(children: [
+                        Icon_Title(Icons.wallet),
+                        title(Translations.of(context)!.amount),
+                        Expanded(child: TextFieldNumber(
+                          controller: viewModel.AmountController,
+                          // label:Translations.of(context)!.amount,
+                          onChanged: (String value) async {
+                            await viewModel.ChangeAmount(value, context);
+                          }
+                          , textAlign: TextAlign.start,
+                          vertical: 1.0.h,
+                        ),)
+                      ],),
+                      //padding: EdgeInsets.symmetric(horizontal: 3.0.w),
+                      SpaceRow(),
+                      Row(mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                                onTap: () async {
+                                  await viewModel.pickImages(true);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon_Title(Icons.add_a_photo_outlined),
+                                    title(Translations.of(context)!
+                                        .invoice_attachment),
 
-                      ],
-                    )),
-                ShowImages(viewModel.images_invoice, viewModel.images_path_invoice),
-              ]),
-          SizedBox(height: 2.0.h,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              AnimatedButton(text: Translations.of(context)!.ExpensesAdd,
-                  onTapped: () async {
-                    await viewModel.addMoney(data, context);
-                  }),
-            ],)
+                                  ],
+                                )),
+                            ShowImages(viewModel.images_invoice,
+                                viewModel.images_path_invoice),
+                          ]),
+                      SizedBox(height: 2.0.h,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          AnimatedButton(
+                              text: Translations.of(context)!.ExpensesAdd,
+                              onTapped: () async {
+                                await viewModel.addMoney(viewModel.currentRequest!, context);
+                              }),
+                        ],)
 
-        ],));
+                    ],))
+              ]);
+        });
   }
   title(String text)
   {

@@ -32,17 +32,17 @@ import '../ViewModel/HomeViewModel.dart';
   }
 
   class _ExpensesPageState extends State<ExpensesPage> {
-  late Future<void> _dataFuture;
+  //late Future<void> _dataFuture;
 
   @override
   void initState() {
     super.initState();
-    _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
+   // _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return  FutureBuilder(
+   /* return  FutureBuilder(
         future: _dataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -54,11 +54,11 @@ import '../ViewModel/HomeViewModel.dart';
             {
               return NoDataView(onTapped:()=> viewModel.GetData(context));
             });
-          } else {
+          } else {*/
            return MainScaffold(context);
-          }
+        /*  }
         },
-          );
+          );*/
   }
 
   Widget MainScaffold(BuildContext context) {
@@ -151,10 +151,7 @@ Widget ListData(List<Requests> lst,HomeViewModel viewModel) {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               AnimatedButton(text: Translations.of(context)!.show,
-                  onTapped: () async {
-                    Navigator.pushNamed(context, Show_Expenses_Route,
-                        arguments: data!);
-                  }),
+                  onTapped: () =>viewModel.showExpensee(data,context))
             ],)
 
         ],));

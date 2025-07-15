@@ -10,6 +10,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Constants/assets/Images_Name.dart';
+import '../Api/ExpenseApi.dart';
 import '../Api/OrderApi.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
@@ -62,64 +63,41 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> GetData(BuildContext context) async {
     checkVersionFun(context);
-    _isLoading=true;
-     _images_load = <File>[];
-    _images_path_load=<String>[];
+    _isLoading = true;
+    _images_load = <File>[];
+    _images_path_load = <String>[];
     _images_delivery = <File>[];
-     _images_path_delivery=<String>[];
-   try
-   {
-    var x= await GetRequetFun(context);
-    if(x!= null)
-      {
-        if(x.currentRequests != null && x.currentRequests!.isNotEmpty)
-          {
-            _CurrentItems= x.currentRequests!;
-          }
-        if(x.scheduledRequests != null && x.scheduledRequests!.isNotEmpty)
-        {
-          _LaterItems= x.scheduledRequests!;
+    _images_path_delivery = <String>[];
+    try {
+      var x = await GetRequetFun(context);
+      if (x != null) {
+        if (x.currentRequests != null && x.currentRequests!.isNotEmpty) {
+          _CurrentItems = x.currentRequests!;
         }
-        if(x.pastRequests != null && x.pastRequests!.isNotEmpty)
-        {
-          _EndItems= x.pastRequests!;
+        if (x.scheduledRequests != null && x.scheduledRequests!.isNotEmpty) {
+          _LaterItems = x.scheduledRequests!;
+        }
+        if (x.pastRequests != null && x.pastRequests!.isNotEmpty) {
+          _EndItems = x.pastRequests!;
         }
       }
-    else
-      {
-        _CurrentItems=_LaterItems=_EndItems=[];
+      else {
+        _CurrentItems = _LaterItems = _EndItems = [];
       }
-   }
-   catch(e)
-    {
-      _isLoading=false;
+    }
+    catch (e) {
+      _isLoading = false;
     }
 
-    _isLoading=false;
-  }
-
-  Future<void> GetPaymentData(BuildContext context) async {
-
-    checkVersionFun(context);
-    _isLoading=true;
+    var y = await GetExpenseTypesFun(context);
+    if (y != null && y.isNotEmpty) {
+      _MyPaymentMethodsList = y;
+    }
+    _SelectedPaymentMethods=null;
+    _AmountController.clear();
     _images_invoice = <File>[];
     _images_path_invoice=<String>[];
-    try
-    {
-      _MyPaymentMethodsList=  [
-        PaymentMethodsData(name: "payment1",id: 1),
-        PaymentMethodsData(name: "payment2",id: 2),
-        PaymentMethodsData(name: "payment3",id: 3),
-      ];
-      _SelectedPaymentMethods=null;
-      _AmountController.clear();
-    }
-    catch(e)
-    {
-      _isLoading=false;
-    }
-
-    _isLoading=false;
+    _isLoading = false;
   }
 
 
@@ -135,7 +113,6 @@ class HomeViewModel extends ChangeNotifier {
     {
       _isLoading=false;
       notifyListeners();
-
     }
 
     _isLoading=false;
@@ -210,6 +187,8 @@ class HomeViewModel extends ChangeNotifier {
     try {
 
       _isLoading=true;
+      _images_invoice = <File>[];
+      _images_path_invoice=<String>[];
       notifyListeners();
       ImagePicker _picker = ImagePicker();
       XFile? resultList = await _picker.pickImage(source: ImageSource.camera);
@@ -218,15 +197,15 @@ class HomeViewModel extends ChangeNotifier {
       if(load==true) {
         print("&&&&");
         print(compress_File!.path);
-        images_load.add(File(compress_File!.path));
-        images_path_load.add(compress_File.path);
-        images_invoice.add(File(compress_File!.path));
-        images_path_invoice.add(compress_File.path);
+        _images_load.add(File(compress_File!.path));
+        _images_path_load.add(compress_File.path);
+        _images_invoice.add(File(compress_File!.path));
+        _images_path_invoice.add(compress_File.path);
       }
       else
         {
-          images_delivery.add(File(compress_File!.path));
-          images_path_delivery.add(compress_File.path);
+          _images_delivery.add(File(compress_File!.path));
+          _images_path_delivery.add(compress_File.path);
         }
       _isLoading=false;
       notifyListeners();
@@ -274,15 +253,24 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> addMoney(Requests data, BuildContext context) async {
     _isLoading=true;
     notifyListeners();
-    await AlertView(context,ImagesName.success,
-    Translations.of(context)!.Ok,
-    Translations.of(context)!.success);
+    if(AmountController.text.isNotEmpty&&SelectedPaymentMethods!= null && images_path_invoice.isNotEmpty) {
+      var x = await addExpensesFun(context,
+          currentRequest!.id.toString(), AmountController.text,
+          SelectedPaymentMethods!.id.toString(), images_path_invoice);
+      if (x != null) {
+        Navigator.pushNamedAndRemoveUntil(context, ExpensesRoute, (Route<dynamic> r) => false);
+      }
+    }
+    else
+      {
+        AlertView(context, "error", Translations.of(context)!.Please,  Translations.of(context)!.enterData);
+      }
     _isLoading=false;
     notifyListeners();
   }
 
   void setSelectedPaymentMethods(PaymentMethodsData? value) {
-_SelectedPaymentMethods=value!;
+    _SelectedPaymentMethods=value!;
     notifyListeners();
   }
 
@@ -360,5 +348,15 @@ _SelectedPaymentMethods=value!;
     notifyListeners();
   }
 
+  Future<void> showExpensee(Requests data,BuildContext context) async{
+    print('*************'+value.toString());
+    _images_invoice = <File>[];
+    _images_path_invoice=<String>[];
+    _currentRequest=data;
+    _SelectedPaymentMethods=null;
+    _AmountController.clear();
+    notifyListeners();
+    Navigator.pushNamed(context, Show_Expenses_Route);
+  }
 
 }

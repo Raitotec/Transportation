@@ -135,7 +135,7 @@ Future<Requests?> addRequetFun(BuildContext context,String id , List<String>? su
           if (valueMap['code'] == 200) {
             print(
                 " fn_addRequet200 ::: ${valueMap['message']} ${valueMap['data']}");
-            await AlertView(context, "success", Translations.of(context)!.okey,
+            await AlertView(context, "success", Translations.of(context)!.Ok,
                 Translations.of(context)!.success);
             Requests obj = new Requests();
 
@@ -204,6 +204,7 @@ Future<Requests?> endRequetFun(BuildContext context,String id , List<String>? su
       try {
         var base_url_data = CompanyData.companyData!.baseUrl;
         var UriData = Uri.parse(base_url_data! + endRequest);
+        print(UriData);
         var token = DelegateData.delegateData!.authorisation!.token!;
         Map<String, String> headers = {
           "Accept": "application/json",
@@ -237,8 +238,8 @@ Future<Requests?> endRequetFun(BuildContext context,String id , List<String>? su
           Map valueMap = jsonDecode(res.body);
           if (valueMap['code'] == 200) {
             print(
-                " fn_addRequet200 ::: ${valueMap['message']} ${valueMap['data']}");
-            await AlertView(context, "success", Translations.of(context)!.okey,
+                " fn_enRequet200 ::: ${valueMap['message']} ${valueMap['data']}");
+            await AlertView(context, "success", Translations.of(context)!.Ok,
                 Translations.of(context)!.success);
             Requests obj = new Requests();
 

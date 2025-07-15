@@ -293,5 +293,10 @@ String get  CompanyNumber {
       'delivery_add_attachment',
       name: 'delivery_add_attachment',
     );
+  }  String get enterData {
+    return Intl.message(
+      'enterData',
+      name: 'enterData',
+    );
   }
 }
