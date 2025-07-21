@@ -60,6 +60,10 @@ dependencies:
   path_provider: ^2.1.1
   path: ^1.8.3
   new_version_plus: ^0.0.12
+  firebase_core: ^3.8.0
+  firebase_messaging: ^15.1.5
+  flutter_local_notifications: ^18.0.1
+  permission_handler: ^11.0.0
 
 dev_dependencies:
   flutter_test:

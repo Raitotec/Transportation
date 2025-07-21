@@ -1,12 +1,14 @@
 
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Models/CompanyModel.dart';
 import '../Models/DelegateDataModel.dart';
+import '../PushNotificationService/ForFirebaseNotifyApi.dart';
 import '../Shared_Data/CompanyData.dart';
 import '../Shared_Data/DelegateData.dart';
 import '../Constants/NetworkCheckData.dart';
@@ -44,7 +46,13 @@ import 'Base_Url.dart';
               print( " fn_Login200 ::: ${valueMap['message']} ${valueMap['data']}");
               var obj= DelegateDataModel.fromJson(valueMap['data']);
               await saveDelegateData(obj);
+              try {
+                final fcmToken = await FirebaseMessaging.instance.getToken();
+                print("**********fcmToken " + fcmToken!);
+                await ForFirebaseNotifyFun(context, obj.user!.id.toString(), fcmToken);
+              }catch(e){
 
+              }
               return obj;
             }
             else {

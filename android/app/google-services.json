@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "598162351378",
+    "project_id": "transportation-d6391",
+    "storage_bucket": "transportation-d6391.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598162351378:android:25c4fd7df01567ba28ffcb",
+        "android_client_info": {
+          "package_name": "com.raitotec.transportation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAftfAk8FmCleCcYlt7P5B9CfOma_s_i1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

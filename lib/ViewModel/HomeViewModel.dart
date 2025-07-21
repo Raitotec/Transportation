@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -16,6 +17,8 @@ import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Models/OrderModel.dart';
 import '../Models/PaymentMethodsData.dart';
+import '../PushNotificationService/ForFirebaseNotifyApi.dart';
+import '../Shared_Data/DelegateData.dart';
 import '../Shared_Data/formatDateTime.dart';
 import '../Shared_View/AlertView.dart';
 import 'package:path_provider/path_provider.dart';
@@ -60,7 +63,14 @@ class HomeViewModel extends ChangeNotifier {
     _images_path_load = <String>[];
     _images_delivery = <File>[];
     _images_path_delivery = <String>[];
+    try
+    {
+      final fcmToken = await FirebaseMessaging.instance.getToken();
+      await ForFirebaseNotifyFun(context, DelegateData.delegateData!.user!.id.toString(), fcmToken!);
+    }
+    catch(e){
 
+    }
     try {
       var x = await GetRequetFun(context);
       if (x != null) {
