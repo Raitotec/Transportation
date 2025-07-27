@@ -56,7 +56,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               providers: [
                                 ChangeNotifierProvider(create: (_) => LoginViewModel()),
                                 ChangeNotifierProvider(create: (_) => UserViewModel()),
-                                ChangeNotifierProvider(create: (_) => NotifactionViewModel()),
+                                ChangeNotifierProvider(
+                                    create: (_) {
+                                      final viewModel = NotifactionViewModel();
+                                      NotifactionViewModel.setInstance(viewModel);
+                                      viewModel.RefreshCount();
+                                      return viewModel;
+                                    }
+                                ),
                                 ChangeNotifierProvider.value(value: homeViewModel),
                                 ChangeNotifierProvider.value(value: expensesViewModel),
                               ],
@@ -79,7 +86,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                     textDirection: model.isRTL ? TextDirection.rtl : TextDirection.ltr,
                                     child: child!,
                                   );
-                                },  debugShowCheckedModeBanner: false,
+                                },
+                                debugShowCheckedModeBanner: false,
                             color: Colors.white,
                             title: "النقليات",
                             onGenerateRoute: CustomRouter.generatedRoute,

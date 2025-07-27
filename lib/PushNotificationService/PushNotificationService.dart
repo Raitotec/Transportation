@@ -3,7 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:transportation/Constants/Localization/LanguageData.dart';
+import 'package:transportation/PushNotificationService/NotifactionViewModel.dart';
+import 'package:transportation/PushNotificationService/NotificationModel.dart';
 
 import 'UserNotifaction.dart';
 
@@ -51,7 +54,7 @@ class PushNotificationService {
             platformChannelSpecifics,
           );
         }
-
+        NotifactionViewModel.instance.RefreshCount();
       });
 
       FirebaseMessaging.onBackgroundMessage(backgroundHandler);

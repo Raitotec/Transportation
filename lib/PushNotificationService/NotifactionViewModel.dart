@@ -1,32 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 import 'ForFirebaseNotifyApi.dart';
 import 'NotificationModel.dart';
 
 class NotifactionViewModel extends ChangeNotifier {
   bool _isLoading = false;
-  bool get isLoading => _isLoading;
-  List<NotificationModel> _Items = <NotificationModel>[];
-  List<NotificationModel> get Items => _Items;
 
-  int get totalCartCount {
-    return Items.length;
+  bool get isLoading => _isLoading;
+  List<NotificationModel> _notifications = <NotificationModel>[];
+
+  List<NotificationModel> get notifications => _notifications;
+  int _totalCartCount = 0;
+  int get totalCartCount => _totalCartCount;
+
+  static NotifactionViewModel? _instance;
+
+  static NotifactionViewModel get instance => _instance!;
+
+  static void setInstance(NotifactionViewModel viewModel) {
+    _instance = viewModel;
   }
-  Future<void> GetData(BuildContext context) async
-  {
-    _isLoading= true;
-    var x= await GetNotifications(context);
-    if( x!= null && x.isNotEmpty)
-      {
-        _Items= x;
+
+  int currentPage = 1;
+  int lastPage = 1;
+
+  Future<void> fetchNotifications(BuildContext context,
+      {bool loadMore = false}) async {
+    print("**********currentPage"+ currentPage.toString());
+    print("**********lastPage"+ lastPage.toString());
+    print("**********loadMore"+ loadMore.toString());
+    print("**********isLoading"+ isLoading.toString());
+
+    if (isLoading || currentPage > lastPage) return;
+
+
+    _isLoading = true;
+    notifyListeners();
+
+    var parsedResponse = await GetNotifications(context, currentPage.toString());
+    if (parsedResponse != null) {
+      if (!loadMore) {
+        _notifications = parsedResponse!.notifications;
+      } else {
+        _notifications.addAll(parsedResponse!.notifications);
       }
-    _isLoading= false;
-  }
+      currentPage = parsedResponse.currentPage + 1;
+      lastPage = parsedResponse.lastPage;
+      _totalCartCount= parsedResponse.count;
+    }
+
+  _isLoading = false;
+  notifyListeners();
+
+}
+
+
 
   Future<void> Refresh(BuildContext context) async {
     _isLoading= true;
     notifyListeners();
-    await GetData(context);
+    await fetchNotifications(context);
+    _isLoading= false;
+    notifyListeners();
+  }
+
+
+  Future<void> RefreshCount() async {
+    _isLoading= true;
+    notifyListeners();
+    var x= await Get_count_unread_notifications();
+    if( x!= null )
+    {
+      _totalCartCount= x;
+    }
     _isLoading= false;
     notifyListeners();
   }

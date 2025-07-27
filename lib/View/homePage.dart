@@ -16,6 +16,7 @@ import '../Api/checkVersion.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
+import '../PushNotificationService/NotifactionViewModel.dart';
 import '../Shared_View/AnimatedButton.dart';
 import '../Shared_View/AnimatedGridIcon.dart';
 import '../Shared_View/AppBarView.dart';
@@ -39,6 +40,7 @@ import '../ViewModel/HomeViewModel.dart';
   void initState() {
     super.initState();
     _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
+
     advancedStatusCheck(context,newVersion);
   }
 

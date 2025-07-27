@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:transportation/Constants/Localization/Translations.dart';
 import 'package:transportation/PushNotificationService/NotificationModel.dart';
 
@@ -57,7 +58,7 @@ Future<bool> ForFirebaseNotifyFun(BuildContext context,String employee_id , Stri
   }
 }
 
-Future<List<NotificationModel>?> GetNotifications(BuildContext context) async {
+Future<NotificationsResponse?> GetNotifications(BuildContext context, String page) async {
   try {
     bool InternetConntected = await hasNetwork();
     if (InternetConntected) {
@@ -65,6 +66,7 @@ Future<List<NotificationModel>?> GetNotifications(BuildContext context) async {
 
         final dataa = {
           "lang": LanguageData.languageData,
+          "page": page
         };
         Map<String, String> data = new Map<String, String>.from(dataa);
 
@@ -74,28 +76,24 @@ Future<List<NotificationModel>?> GetNotifications(BuildContext context) async {
         if (response.statusCode == 200) {
           Map valueMap = jsonDecode(response.body);
           if (valueMap['code'] == 200) {
-            print(" fn_NotificationModel200 ::: ${valueMap['message']} ${valueMap['data']}");
-            if (valueMap['data'] != null) {
-              List<NotificationModel> obj = <NotificationModel>[];
-              valueMap['data']['unread_notifications'].forEach((v) {
-                obj.add(new NotificationModel.fromJson(v));
-              });
-              return obj;
-            }
-            else
-              return null;
+            final data = jsonDecode(response.body)['data'];
+            final parsedResponse = NotificationsResponse.fromJson(data);
+            return parsedResponse;
           }
           else {
-            if (valueMap['error'] != null)
+            if (valueMap['error'] != null) {
               await AlertView(
                   context, "error", Translations.of(context)!.ErrorTitle,
                   valueMap['error'].toString());
-            else
+            }
+
+            else {
               await AlertView(
                   context, "error", Translations.of(context)!.ErrorTitle,
                   valueMap['message'].toString());
+            }
             print(
-                "fn_getNotificationModel400 ::: ${valueMap['message']} ${valueMap['data']}");
+                "fn_GetOptionsFun400 ::: ${valueMap['message']} ${valueMap['data']}");
             return null;
           }
         }
@@ -136,3 +134,38 @@ Future<List<NotificationModel>?> GetNotifications(BuildContext context) async {
     return null;
   }
 }
+
+
+Future<int?> Get_count_unread_notifications() async {
+  try {
+    bool InternetConntected = await hasNetwork();
+    if (InternetConntected) {
+      final dataa = {
+        "lang": LanguageData.languageData,
+      };
+      Map<String, String> data = new Map<String, String>.from(dataa);
+
+
+      final response = await Get_Data("getNotification", data);
+      print(response.body);
+      if (response.statusCode == 200) {
+        Map valueMap = jsonDecode(response.body);
+        if (valueMap['code'] == 200) {
+          print(
+              " fn_NotificationModel200 ::: ${valueMap['message']} ${valueMap['data']}");
+          if (valueMap['data'] != null) {
+
+            return valueMap['data']['count_unread_notifications'];
+          }
+          else
+            return null;
+        }
+      }
+    }
+  }
+  catch (e) {
+    print("fn_GetOptionsFun_Exception ::: ${e} ");
+    return null;
+  }
+}
+

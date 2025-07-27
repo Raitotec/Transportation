@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Constants/assets/Images_Name.dart';
@@ -18,6 +19,7 @@ import '../Constants/Localization/Translations.dart';
 import '../Models/OrderModel.dart';
 import '../Models/PaymentMethodsData.dart';
 import '../PushNotificationService/ForFirebaseNotifyApi.dart';
+import '../PushNotificationService/NotifactionViewModel.dart';
 import '../Shared_Data/DelegateData.dart';
 import '../Shared_Data/formatDateTime.dart';
 import '../Shared_View/AlertView.dart';
@@ -54,15 +56,14 @@ class HomeViewModel extends ChangeNotifier {
   Requests? get currentRequest => _currentRequest;
 
   Future<void> GetData(BuildContext context) async {
-    print("*************GetData");
-    print("==== GetData Called From:");
-    print(StackTrace.current);
+
     checkVersionFun(context);
     _isLoading = true;
     _images_load = <File>[];
     _images_path_load = <String>[];
     _images_delivery = <File>[];
     _images_path_delivery = <String>[];
+    Provider.of<NotifactionViewModel>(context, listen: false).RefreshCount();
     try
     {
       final fcmToken = await FirebaseMessaging.instance.getToken();

@@ -31,7 +31,7 @@ class CustomRouter {
       case Splash_Route:
         return MaterialPageRoute(builder: (_) => SplashPage());
       case Notifaction_Route:
-        return MaterialPageRoute(builder: (_) => NotifactionView());
+        return MaterialPageRoute(builder: (_) => NotificationsScreen());
       case ExpensesRoute:
         return MaterialPageRoute(builder: (_) => MainHomeScreen(currentIndex: 1,));
       case MainRoute:
