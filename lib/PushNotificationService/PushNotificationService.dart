@@ -1,4 +1,5 @@
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -28,9 +29,10 @@ class PushNotificationService {
       // Get the token
       await getToken();
 
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
 
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         print('********* Got a message whilst in the foreground!');
+        print('********* Got a message whilst in the foreground!'+message.data.toString());
         const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
           'channel_id',
@@ -40,23 +42,8 @@ class PushNotificationService {
         );
         const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-        try {
-          UserNotifaction? userData = message.data != null ? new UserNotifaction.fromJson(message.data) : null;
-          if (userData != null && userData.userId != null && userData.userId != "0" &&
-              userData.userId!.isNotEmpty) {
 
-            UserNotifactionData.userNotifactionData = userData;
-            await removeUserNotifactionDate();
-            await saveUserNotifactionData(userData!);
-            await flutterLocalNotificationsPlugin.show(
-                0,
-                userData.title!,
-                userData.body!,
-                platformChannelSpecifics,
-                payload: "ChatNotifaction"
-            );
-          }
-          else {
+
             await flutterLocalNotificationsPlugin.show(
               0,
               message.notification!.title!,
@@ -64,13 +51,6 @@ class PushNotificationService {
               platformChannelSpecifics,
             );
             //    await CallKit();
-          }
-        }
-        catch(e)
-        {
-          print("*********"+e.toString());
-        }
-
       });
 
       FirebaseMessaging.onBackgroundMessage(backgroundHandler);
@@ -95,6 +75,7 @@ class PushNotificationService {
       badge: true,
       sound: true,
     );
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true);
     print('******** User granted permission: ${settings.authorizationStatus}');
   }
 
@@ -106,18 +87,10 @@ final GlobalKey<NavigatorState> myNavigatorKey = GlobalKey<NavigatorState>();
 
 @pragma('vm:entry-point')
 Future<void> backgroundHandler(RemoteMessage message) async {
-  // await Firebase.initializeApp();
+   await Firebase.initializeApp();
   print("********* onBackgroundMessageFun notification");
-  var x= LanguageData.languageData;
-  print("********"+x);
-  print("********"+message.data.toString());
-  UserNotifaction? userData = message.data != null ? new UserNotifaction.fromJson(message.data) : null;
-  if(userData!= null && userData.userId != null && userData.userId != "0"&& userData.userId!.isNotEmpty) {
-    UserNotifactionData.userNotifactionData = userData;
-    await removeUserNotifactionDate();
-    await saveUserNotifactionData(userData!);
-  }
-  // await CallKit();
+   print("********"+message.notification!.title!);
+   print("********"+message.notification!.body!);
 }
 
 

@@ -8,6 +8,7 @@ import '../Constants/Localization/Translations.dart';
 import '../Constants/Routes/route_constants.dart';
 import '../Constants/Style.dart';
 import '../Constants/assets/Images_Name.dart';
+import '../PushNotificationService/ForFirebaseNotifyApi.dart';
 import '../Shared_Data/CompanyData.dart';
 import '../Shared_Data/DelegateData.dart';
 
@@ -181,6 +182,12 @@ Drawer_itemTab( BuildContext context, String route)async
   if (route == "loginRoute") {
     await removeDelgateDate();
     await removeCompanyDate();
+    try
+    {
+       ForFirebaseNotifyFun(context, DelegateData.delegateData!.user!.id.toString(), "");
+    }
+    catch(e){
+    }
     Navigator.pushNamedAndRemoveUntil(context, Splash_Route,(Route<dynamic> r)=>false);
   }
   else  {

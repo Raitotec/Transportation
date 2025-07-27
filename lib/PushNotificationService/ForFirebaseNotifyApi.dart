@@ -12,13 +12,13 @@ Future<bool> ForFirebaseNotifyFun(BuildContext context,String employee_id , Stri
       try {
 
         var data = jsonEncode(<String, String>{
-          'customerId': employee_id,
-          'token': token,
+          'firebase_token': token,
           //"lang": lang.languageCode,
         });
 
 
-        final response =await Post_Data("ForFirebaseNotify",data);
+        final response =await Post_Data("updateToken",data);
+
         print(response.body);
         if (response.statusCode == 200) {
           Map valueMap = jsonDecode(response.body);

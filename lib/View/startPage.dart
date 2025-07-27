@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:new_version_plus/new_version_plus.dart';
+import '../Api/checkVersion.dart';
 import '../Constants/Localization/LanguageDropdown.dart';
 import '../Constants/Localization/LanguageIcon.dart';
 import '../Constants/Routes/route_constants.dart';
@@ -33,12 +35,12 @@ class startPage extends StatefulWidget {
 }
 
 class _startPageState extends State<startPage> {
-
+  final newVersion = NewVersionPlus();
 
 
   void initState() {
     super.initState();
-    Provider.of<LoginViewModel>(context, listen: false).checkVersion;
+    advancedStatusCheck(context,newVersion);
   }
 
   @override

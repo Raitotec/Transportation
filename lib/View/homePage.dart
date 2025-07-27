@@ -7,10 +7,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Models/OrderModel.dart';
+import '../Api/checkVersion.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
@@ -31,11 +33,13 @@ import '../ViewModel/HomeViewModel.dart';
 
   class _HomeScreenState extends State<HomePage> {
   late Future<void> _dataFuture;
+  final newVersion = NewVersionPlus();
 
   @override
   void initState() {
     super.initState();
     _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
+    advancedStatusCheck(context,newVersion);
   }
 
   @override

@@ -13,6 +13,7 @@ import 'Constants/Routes/route_constants.dart';
 
 import 'package:sizer/sizer.dart' ;
 
+import 'PushNotificationService/PushNotificationService.dart';
 import 'ViewModel/LoginViewModel.dart';
 import 'ViewModel/UserViewModel.dart';
 
@@ -29,6 +30,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final GlobalKey<NavigatorState> myNavigatorKey = GlobalKey<NavigatorState>();
   final homeViewModel = HomeViewModel();
   final expensesViewModel = ExpensesViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    PushNotificationService notificationService = PushNotificationService();
+
+    notificationService.initialize(context);
+
+    WidgetsBinding.instance.addObserver(this);
+    //Check call when open app from terminated
+    // checkAndNavigationCallingPage();
+
+  }
+
   @override
   Widget build(BuildContext contextt) {
     return
