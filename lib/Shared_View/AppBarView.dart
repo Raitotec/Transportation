@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sizer/sizer.dart';
+import 'package:transportation/PushNotificationService/NotifactionViewModel.dart';
 
-import '../Constants/Localization/LanguageIcon.dart';
-import '../Constants/Localization/ScopeModelWrapper.dart';
 import '../Constants/Routes/route_constants.dart';
 import '../Constants/Style.dart';
-import '../Constants/assets/Images_Name.dart';
 
+import 'package:badges/badges.dart' as badges;
 
 
 
@@ -33,19 +32,27 @@ AppBarWithlanguage(BuildContext context, String header) {
           ),
     ),
     actions: <Widget>[
-  /*    ScopedModelDescendant<AppModel>(
-          builder: (context, child, model) =>
-              InkWell(child: Padding(
-                padding: EdgeInsets.fromLTRB(1.5.w, 1.5.h, 1.5.w, 0),
-                child: Icon(Icons.language, size: 4.0.h,color: Colors.white,),
-              ),
-                onTap: () {
-                  model.changeDirection();
-                  Navigator.pushNamedAndRemoveUntil(context, MainRoute,(Route<dynamic> r)=>false);
-                },
-              )),
-   */
-      LanguageIconDropdownButton(color: Style.WhiteColor,)
+      Consumer<NotifactionViewModel>(
+          builder: (context, viewModel, child) {
+            return Container(
+                margin: EdgeInsets.fromLTRB(3.0.w, 0, 3.0.w, 0),
+                child:  badges.Badge(
+                position: badges.BadgePosition.topEnd(top: 0, end: 0),
+                showBadge: true,
+                badgeContent: Text(
+                  viewModel.totalCartCount.toString(),
+                  style: Style.Header5,
+                ),
+                child: InkWell(
+                  onTap: ()=>Navigator.pushNamed(context,Notifaction_Route),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(1.5.w, 1.5.h, 1.5.w, 0),
+                    child: Icon(Icons.notifications, size: 4.0.h,
+                      color: Colors.white,),
+                  ),
+                )
+            ));
+          }),
     ],
   );
 }

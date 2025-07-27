@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:transportation/Models/OrderModel.dart';
+import 'package:transportation/PushNotificationService/NotifactionView.dart';
 import 'package:transportation/View/MainHomePage.dart';
 import 'package:transportation/View/ShowExpensesPage.dart';
 import 'package:transportation/View/showOrderPage.dart';
@@ -29,6 +30,8 @@ class CustomRouter {
         }
       case Splash_Route:
         return MaterialPageRoute(builder: (_) => SplashPage());
+      case Notifaction_Route:
+        return MaterialPageRoute(builder: (_) => NotifactionView());
       case ExpensesRoute:
         return MaterialPageRoute(builder: (_) => MainHomeScreen(currentIndex: 1,));
       case MainRoute:
