@@ -298,5 +298,10 @@ String get  CompanyNumber {
       'enterData',
       name: 'enterData',
     );
+  }String get notification {
+    return Intl.message(
+      'notification',
+      name: 'notification',
+    );
   }
 }

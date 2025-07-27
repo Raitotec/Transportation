@@ -31,7 +31,6 @@ class PushNotificationService {
 
 
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        print('********* Got a message whilst in the foreground!');
         print('********* Got a message whilst in the foreground!'+message.data.toString());
         const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
@@ -42,15 +41,17 @@ class PushNotificationService {
         );
         const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
+        UserNotifaction? userData = message.data != null ?  UserNotifaction.fromJson(message.data) : null;
+        if(userData!= null && userData.title != null && userData.body != null) {
+          print("**********"+userData.body.toString());
+          await flutterLocalNotificationsPlugin.show(
+            0,
+            userData.title!,
+            userData.body!,
+            platformChannelSpecifics,
+          );
+        }
 
-
-            await flutterLocalNotificationsPlugin.show(
-              0,
-              message.notification!.title!,
-              message.notification!.body!,
-              platformChannelSpecifics,
-            );
-            //    await CallKit();
       });
 
       FirebaseMessaging.onBackgroundMessage(backgroundHandler);
@@ -88,9 +89,27 @@ final GlobalKey<NavigatorState> myNavigatorKey = GlobalKey<NavigatorState>();
 @pragma('vm:entry-point')
 Future<void> backgroundHandler(RemoteMessage message) async {
    await Firebase.initializeApp();
-  print("********* onBackgroundMessageFun notification");
-   print("********"+message.notification!.title!);
-   print("********"+message.notification!.body!);
+   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+   const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
+     'channel_id',
+     'channel_name',
+     importance: Importance.max,
+     priority: Priority.high,
+   );
+   const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+   print("********* onBackgroundMessageFun notification");
+
+   UserNotifaction? userData = message.data != null ?  UserNotifaction.fromJson(message.data) : null;
+   if(userData!= null && userData.title != null && userData.body != null) {
+     print("**********"+userData.body.toString());
+     await flutterLocalNotificationsPlugin.show(
+       0,
+       userData.title!,
+       userData.body!,
+       platformChannelSpecifics,
+     );
+   }
+
 }
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'ForFirebaseNotifyApi.dart';
 import 'NotificationModel.dart';
 
 class NotifactionViewModel extends ChangeNotifier {
@@ -14,7 +15,20 @@ class NotifactionViewModel extends ChangeNotifier {
   Future<void> GetData(BuildContext context) async
   {
     _isLoading= true;
+    var x= await GetNotifications(context);
+    if( x!= null && x.isNotEmpty)
+      {
+        _Items= x;
+      }
     _isLoading= false;
+  }
+
+  Future<void> Refresh(BuildContext context) async {
+    _isLoading= true;
+    notifyListeners();
+    await GetData(context);
+    _isLoading= false;
+    notifyListeners();
   }
 
 }

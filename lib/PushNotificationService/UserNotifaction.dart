@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transportation/Constants/Localization/LanguageData.dart';
 
 class UserNotifactionData {
   static UserNotifaction? userNotifactionData= null;
@@ -23,19 +24,21 @@ class UserNotifaction{
 
   UserNotifaction.fromJson(Map<String, dynamic> json) {
     try {
-      name = json['name'] != null ? json['name'] : "";
-      type = json['type'] != null ? json['type'] : "";
-      userId = json['teacherId'] != null ? json['teacherId'] : "";
-      app_id = json['app_id'] != null ? json['app_id'] : "";
-      channel_name = json['channel_name'] != null ? json['channel_name'] : "";
-      token = json['token'] != null ? json['token'] : "";
-      img = json['img'] != null ? json['img'] : "";
-      title=json['title']!= null? json['title']:"";
-      body=json['body']!= null? json['body']:"";
+
+      if(LanguageData.languageData=="ar")
+        {
+          title=json['title_ar']!= null? json['title_ar']:"";
+          body=json['body_ar']!= null? json['body_ar']:"";
+        }
+      else
+        {
+          title=json['title']!= null? json['title']:"";
+          body=json['body']!= null? json['body']:"";
+        }
     }
     catch(e)
     {
-
+      print("**********"+e.toString());
     }
   }
 
