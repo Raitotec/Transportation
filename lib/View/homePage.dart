@@ -54,6 +54,7 @@ import '../ViewModel/HomeViewModel.dart';
         // التطبيق رجع من الخلفية
         print("🔄 App Resumed - Refreshing notifications");
         NotifactionViewModel.instance.Refresh();
+        HomeViewModel.instance.Get_Data();
       }
     }
 
@@ -239,10 +240,19 @@ Widget ListData(List<Requests> lst) {
         Divider(height: 1.0.h,color: Style.SecondryColor,thickness: 0.5,),
         Row(
           children: [
-            title(Translations.of(context)!.date),
+            title(Translations.of(context)!.date1),
             des(data.formattedDate.toString()),
             title(Translations.of(context)!.time),
             Text(data.formattedTime.toString(),style:  Style.MainText16,),
+          ],
+        ),
+        if(viewModel.value == 0 )
+        Row(
+          children: [
+            title(Translations.of(context)!.date2),
+            des(data.formatted_deliveryDate.toString()),
+            title(Translations.of(context)!.time),
+            Text(data.formatted_deliveryTime.toString(),style:  Style.MainText16,),
           ],
         ),
       SizedBox(height: 1.0.h,),

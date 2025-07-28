@@ -67,5 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "delivery_add_attachment": MessageLookupByLibrary.simpleMessage("Add Delivery attachment"),
     "enterData":MessageLookupByLibrary.simpleMessage("enter all data"),
     "notification":MessageLookupByLibrary.simpleMessage("notification"),
+    "date1":MessageLookupByLibrary.simpleMessage("Request Date"),
+    "date2":MessageLookupByLibrary.simpleMessage("Delivery Date"),
   };
 }

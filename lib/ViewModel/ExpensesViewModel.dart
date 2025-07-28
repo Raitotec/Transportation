@@ -23,6 +23,13 @@ import 'package:path/path.dart';
 
 class ExpensesViewModel extends ChangeNotifier {
 
+  static ExpensesViewModel? _instance;
+  static ExpensesViewModel get instance => _instance!;
+
+  static void setInstance(ExpensesViewModel viewModel) {
+    _instance = viewModel;
+  }
+
   bool _isLoading = false;
   bool _checkVersion = false;
   List<Requests> _CurrentItems = <Requests>[];
@@ -43,10 +50,6 @@ class ExpensesViewModel extends ChangeNotifier {
   Requests? get currentRequest => _currentRequest;
 
   Future<void> GetData(BuildContext context) async {
-    print("*************GetData");
-    print("==== GetData Called From:");
-    print(StackTrace.current);
-    checkVersionFun(context);
     _isLoading = true;
     _SelectedPaymentMethods=null;
     _AmountController.clear();
@@ -74,7 +77,36 @@ class ExpensesViewModel extends ChangeNotifier {
 
     _isLoading = false;
   }
+  Future<void> Get_Data() async {
+    _isLoading = true;
+    _SelectedPaymentMethods=null;
+    _AmountController.clear();
+    _images_invoice = <File>[];
+    _images_path_invoice=<String>[];
+    notifyListeners();
+    try {
+      var x = await GetRequet_Fun();
+      if (x != null) {
+        if (x.currentRequests != null && x.currentRequests!.isNotEmpty) {
+          _CurrentItems = x.currentRequests!;
+        }
+      }
+      else {
+        _CurrentItems =  [];
+      }
+    }
+    catch (e) {
+      _isLoading = false;
+    }
 
+    var y = await GetExpenseTypes_Fun();
+    if (y != null && y.isNotEmpty) {
+      _MyPaymentMethodsList = y;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
 
   Future<void> Refresh(BuildContext context) async {
     print("*************Refresh");

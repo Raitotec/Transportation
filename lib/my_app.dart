@@ -29,8 +29,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   final GlobalKey<NavigatorState> myNavigatorKey = GlobalKey<NavigatorState>();
-  final homeViewModel = HomeViewModel();
-  final expensesViewModel = ExpensesViewModel();
+
 
   @override
   void initState() {
@@ -64,8 +63,23 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                       return viewModel;
                                     }
                                 ),
-                                ChangeNotifierProvider.value(value: homeViewModel),
-                                ChangeNotifierProvider.value(value: expensesViewModel),
+                                ChangeNotifierProvider(
+                                    create: (_) {
+                                      final viewModel = HomeViewModel();
+                                      HomeViewModel.setInstance(viewModel);
+                                      viewModel.Get_Data();
+                                      return viewModel;
+                                    }
+                                ),
+                                ChangeNotifierProvider(
+                                    create: (_) {
+                                      final viewModel = ExpensesViewModel();
+                                      ExpensesViewModel.setInstance(viewModel);
+                                      viewModel.Get_Data();
+                                      return viewModel;
+                                    }
+                                ),
+
                               ],
                               child:MaterialApp(
                             navigatorKey: myNavigatorKey,

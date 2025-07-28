@@ -94,6 +94,50 @@ Future< RequestsData?> GetRequetFun(BuildContext context) async {
   }
 }
 
+Future< RequestsData?> GetRequet_Fun() async {
+  try {
+    bool InternetConntected = await hasNetwork();
+    if (InternetConntected) {
+      try {
+        final dataa = {
+          "lang": LanguageData.languageData,
+        };
+        Map<String, String> data = new Map<String, String>.from(dataa);
+        print(dataa);
+        print(data);
+
+
+        final response = await Get_Data(schedule, data);
+        print(response.body);
+        if (response.statusCode == 200) {
+          Map valueMap = jsonDecode(response.body);
+          if (valueMap['code'] == 200) {
+            print(
+                " fn_GetOptionsFun200 ::: ${valueMap['message']} ${valueMap['data']}");
+            RequestsData obj = new RequestsData();
+
+            obj = new RequestsData.fromJson(valueMap['data']);
+            // await saveOptionData(obj);
+            return obj;
+          }
+          return null;
+        }
+        return null;
+      }
+      catch (e) {
+        return null;
+      }
+    }
+    else {
+      return null;
+    }
+  }
+  catch (e) {
+    return null;
+  }
+}
+
+
 Future<Requests?> addRequetFun(BuildContext context,String id , List<String>? supplierLoadingRequestAttachments, List<String>? loadingPermission_attachments) async {
   try {
     bool InternetConntected = await hasNetwork();

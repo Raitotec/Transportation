@@ -95,11 +95,24 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
             Row(
               children: [
                 Icon_Title(Icons.calendar_month),
-                title(Translations.of(context)!.date),
+                title(Translations.of(context)!.date1),
                 des(viewModel.currentRequest!.formattedDate.toString()),
                 Icon_Title(Icons.timer_outlined),
                 title(Translations.of(context)!.time),
                 Text(viewModel.currentRequest!.formattedTime.toString(), style: Style.MainText16,),
+              ],
+            ),
+            if(viewModel.value == 0 )
+            SpaceRow(),
+            if(viewModel.value == 0 )
+            Row(
+              children: [
+                Icon_Title(Icons.calendar_month),
+                title(Translations.of(context)!.date2),
+                des(viewModel.currentRequest!.formatted_deliveryDate.toString()),
+                Icon_Title(Icons.timer_outlined),
+                title(Translations.of(context)!.time),
+                Text(viewModel.currentRequest!.formatted_deliveryTime.toString(), style: Style.MainText16,),
               ],
             ),
             SpaceRow(),

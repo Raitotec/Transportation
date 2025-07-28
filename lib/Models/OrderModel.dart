@@ -73,6 +73,8 @@ class Requests {
   List<String>? loadingPermissionAttachments;//اذن التسليم
   String? formattedDate;
   String? formattedTime;
+  String? formatted_deliveryDate;
+  String? formatted_deliveryTime;
   int? order_type_id;//0 current , 1 later, 2 end
   Requests({this.id, this.requestNumber, this.requestDateTime, this.deliveryDateTime, this.fuelType, this.loadingSite, this.clientStation, this.isClosed, this.loadingRequestAttachments, this.supplierLoadingRequestAttachments, this.loadingPermissionAttachments});
 
@@ -93,7 +95,22 @@ class Requests {
     {
       formattedTime="";
     }
-    deliveryDateTime = json['delivery_dateTime'];
+
+    deliveryDateTime = json['delivery_dateTime']??"";
+    try {
+      formatted_deliveryDate =getFormatDate(DateTime.parse(deliveryDateTime!));
+    }
+    catch(e)
+    {
+      formatted_deliveryDate="";
+    } try {
+      formatted_deliveryTime = getFormatTimeDateTime(DateTime.parse(deliveryDateTime!));
+    }
+    catch(e)
+    {
+      formatted_deliveryTime="";
+    }
+
     fuelType = json['fuel_type'];
     loadingSite = json['loadingSite'] != null ? new LoadingSite.fromJson(json['loadingSite']) : null;
     clientStation = json['clientStation'] != null ? new ClientStation.fromJson(json['clientStation']) : null;

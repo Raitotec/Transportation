@@ -199,3 +199,64 @@ Future< List<PaymentMethodsData>?> GetExpenseTypesFun(BuildContext context) asyn
     return null;
   }
 }
+Future< List<PaymentMethodsData>?> GetExpenseTypes_Fun() async {
+  try {
+    bool InternetConntected = await hasNetwork();
+    if (InternetConntected) {
+      try {
+        final dataa = {
+          "lang": LanguageData.languageData,
+        };
+        Map<String, String> data = new Map<String, String>.from(dataa);
+        print(dataa);
+        print(data);
+
+
+        final response = await Get_Data(getExpenseTypes, data);
+        print(response.body);
+        if (response.statusCode == 200) {
+          Map valueMap = jsonDecode(response.body);
+          if (valueMap['code'] == 200) {
+            print(
+                " fn_GetOptionsFun200 ::: ${valueMap['message']} ${valueMap['data']}");
+            List<PaymentMethodsData> obj=<PaymentMethodsData>[];
+            if (valueMap['data'] != null) {
+              valueMap['data'].forEach((v) {
+                obj.add(new PaymentMethodsData.fromJson(v));
+              });
+            }
+            return obj;
+          }
+          else {
+            print(
+                "fn_GetOptionsFun400 ::: ${valueMap['message']} ${valueMap['data']}");
+            return null;
+          }
+        }
+        else if (response.statusCode == 422) {
+          Map valueMap = jsonDecode(response.body);
+
+          return null;
+        }
+        else {
+
+          print("fn_GetOptionsFun_statusCode400 ::: ${response.statusCode} ");
+          return null;
+        }
+      }
+      catch (e) {
+
+        print("fn_GetOptionsFun_Exception ::: ${e} ");
+        return null;
+      }
+    }
+    else {
+      print("fn_GetOptionsFun_Exception ::: checkInternet ");
+      return null;
+    }
+  }
+  catch (e) {
+    print("fn_GetOptionsFun_Exception ::: ${e} ");
+    return null;
+  }
+}

@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/PushNotificationService/NotifactionViewModel.dart';
 import 'package:transportation/Shared_View/NoDataView.dart';
+import 'package:transportation/ViewModel/HomeViewModel.dart';
 
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
 import '../Shared_View/AppBarView.dart';
 import '../Shared_View/DrawerView.dart';
 import '../Shared_View/ProgressIndicatorButton.dart';
+import '../ViewModel/ExpensesViewModel.dart';
 import 'NotificationModel.dart';
 
 
@@ -26,6 +28,8 @@ class _NotificationsScreenState extends State<NotificationsScreen>  with Widgets
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<NotifactionViewModel>(context, listen: false).refresh();
+      Provider.of<ExpensesViewModel>(context, listen: false).GetData(context);
+      Provider.of<HomeViewModel>(context, listen: false).GetData(context);
     });
   }
   @override

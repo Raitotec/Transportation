@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:transportation/PushNotificationService/NotifactionViewModel.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:transportation/ViewModel/HomeViewModel.dart';
 
+import '../ViewModel/ExpensesViewModel.dart';
 import 'UserNotifaction.dart';
 
 
@@ -53,6 +55,8 @@ class PushNotificationService {
           );
         }
         NotifactionViewModel.instance.Refresh();
+        ExpensesViewModel.instance.Get_Data();
+        HomeViewModel.instance.Get_Data();
       });
 
       FirebaseMessaging.onBackgroundMessage(backgroundHandler);

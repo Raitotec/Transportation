@@ -28,6 +28,13 @@ import 'package:path/path.dart';
 
 class HomeViewModel extends ChangeNotifier {
 
+  static HomeViewModel? _instance;
+  static HomeViewModel get instance => _instance!;
+
+  static void setInstance(HomeViewModel viewModel) {
+    _instance = viewModel;
+  }
+
   bool _isLoading = false;
   bool _checkVersion = false;
   List<Requests> _CurrentItems = <Requests>[];
@@ -94,6 +101,38 @@ class HomeViewModel extends ChangeNotifier {
       _isLoading = false;
     }
     _isLoading = false;
+  }
+  Future<void> Get_Data() async {
+
+    _isLoading = true;
+    _images_load = <File>[];
+    _images_path_load = <String>[];
+    _images_delivery = <File>[];
+    _images_path_delivery = <String>[];
+    _CurrentItems = _LaterItems = _EndItems = [];
+    notifyListeners();
+    try {
+      var x = await GetRequet_Fun();
+      if (x != null) {
+        if (x.currentRequests != null && x.currentRequests!.isNotEmpty) {
+          _CurrentItems = x.currentRequests!;
+        }
+        if (x.scheduledRequests != null && x.scheduledRequests!.isNotEmpty) {
+          _LaterItems = x.scheduledRequests!;
+        }
+        if (x.pastRequests != null && x.pastRequests!.isNotEmpty) {
+          _EndItems = x.pastRequests!;
+        }
+      }
+      else {
+        _CurrentItems = _LaterItems = _EndItems = [];
+      }
+    }
+    catch (e) {
+      _isLoading = false;
+    }
+    _isLoading = false;
+    notifyListeners();
   }
 
 

@@ -56,6 +56,7 @@ import '../Shared_View/dropdown.dart';
         // التطبيق رجع من الخلفية
         print("🔄 App Resumed - Refreshing notifications");
         NotifactionViewModel.instance.Refresh();
+        ExpensesViewModel.instance.Get_Data();
       }
     }
 
@@ -164,7 +165,7 @@ Widget ListData(List<Requests> lst,ExpensesViewModel viewModel) {
           Divider(height: 1.0.h, color: Style.SecondryColor, thickness: 0.5,),
           Row(
             children: [
-              title(Translations.of(context)!.date),
+              title(Translations.of(context)!.date1),
               des(data.formattedDate.toString()),
               title(Translations.of(context)!.time),
               Text(data.formattedTime.toString(),style:  Style.MainText16,),

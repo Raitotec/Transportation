@@ -304,4 +304,16 @@ String get  CompanyNumber {
       name: 'notification',
     );
   }
+  String get date1 {
+    return Intl.message(
+      'date1',
+      name: 'date1',
+    );
+  }
+  String get date2 {
+    return Intl.message(
+      'date2',
+      name: 'date2',
+    );
+  }
 }

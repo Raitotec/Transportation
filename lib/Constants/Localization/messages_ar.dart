@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "delivery_add_attachment": MessageLookupByLibrary.simpleMessage("إضافة مرفق التسليم"),
     "enterData":MessageLookupByLibrary.simpleMessage("ادخل جميع البيانات"),
     "notification":MessageLookupByLibrary.simpleMessage("الاشعارات"),
-
+    "date1":MessageLookupByLibrary.simpleMessage("تاريخ الطلب "),
+    "date2":MessageLookupByLibrary.simpleMessage("تاريخ التسليم "),
   };
 }
