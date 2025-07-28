@@ -24,7 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Login_btn":MessageLookupByLibrary.simpleMessage( "Login"),
     "Lang":MessageLookupByLibrary.simpleMessage("Arabic Language"),
     "errorTitle": MessageLookupByLibrary.simpleMessage("Sorry"),
-    "errorDes": MessageLookupByLibrary.simpleMessage("An error occurred, please try again"),
+    "errorDes": MessageLookupByLibrary.simpleMessage("please try again"),
     "checkInternet": MessageLookupByLibrary.simpleMessage("Please check your internet connection"),
     "please": MessageLookupByLibrary.simpleMessage("Please"),
     "lastVersion": MessageLookupByLibrary.simpleMessage("A new version of this app is available. Please update now"),

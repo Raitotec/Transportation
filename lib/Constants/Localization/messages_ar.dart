@@ -24,7 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Login_btn":MessageLookupByLibrary.simpleMessage( "سجل الان"),
     "Lang":MessageLookupByLibrary.simpleMessage( "اللغة الإنجليزية"),
     "errorTitle": MessageLookupByLibrary.simpleMessage("للأسف"),
-    "errorDes": MessageLookupByLibrary.simpleMessage("حدث خطا ما حاول مره اخري"),
+    "errorDes": MessageLookupByLibrary.simpleMessage(" حاول مره اخري"),
     "checkInternet": MessageLookupByLibrary.simpleMessage("يرجى التحقق من اتصالك بالانترنت"),
     "please": MessageLookupByLibrary.simpleMessage("من فضلك"),
     "lastVersion": MessageLookupByLibrary.simpleMessage("يتوفر إصدار جديد من هذا التطبيق. يرجى تحديث الآن"),

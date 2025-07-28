@@ -27,10 +27,7 @@ class NotifactionViewModel extends ChangeNotifier {
 
   Future<void> fetchNotifications(BuildContext context,
       {bool loadMore = false}) async {
-    print("**********currentPage"+ currentPage.toString());
-    print("**********lastPage"+ lastPage.toString());
-    print("**********loadMore"+ loadMore.toString());
-    print("**********isLoading"+ isLoading.toString());
+
 
     if (isLoading || currentPage > lastPage) return;
 
@@ -59,6 +56,8 @@ class NotifactionViewModel extends ChangeNotifier {
 
   Future<void> Refresh(BuildContext context) async {
     _isLoading= true;
+      currentPage = 1;
+      lastPage = 1;
     notifyListeners();
     await fetchNotifications(context);
     _isLoading= false;
