@@ -64,7 +64,7 @@ class HomeViewModel extends ChangeNotifier {
     _images_delivery = <File>[];
     _images_path_delivery = <String>[];
     _CurrentItems = _LaterItems = _EndItems = [];
-    Provider.of<NotifactionViewModel>(context, listen: false).RefreshCount();
+    Provider.of<NotifactionViewModel>(context, listen: false).Refresh();
     try
     {
       final fcmToken = await FirebaseMessaging.instance.getToken();

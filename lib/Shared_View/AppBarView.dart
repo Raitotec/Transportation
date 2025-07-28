@@ -101,7 +101,7 @@ class AppBarWithLanguage extends StatelessWidget implements PreferredSizeWidget 
                 child: InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, Notifaction_Route).then((_) {
-                      viewModel.RefreshCount(); // حدث بعد الرجوع
+                      viewModel.Refresh(); // حدث بعد الرجوع
                     });
                   },
                   child: Padding(

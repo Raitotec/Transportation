@@ -32,19 +32,40 @@ import '../ViewModel/HomeViewModel.dart';
   _HomeScreenState createState() => _HomeScreenState();
   }
 
-  class _HomeScreenState extends State<HomePage> {
+  class _HomeScreenState extends State<HomePage> with WidgetsBindingObserver{
   late Future<void> _dataFuture;
   final newVersion = NewVersionPlus();
 
   @override
   void initState() {
     super.initState();
-    _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
 
-    advancedStatusCheck(context,newVersion);
+    _dataFuture = Provider.of<HomeViewModel>(context, listen: false).GetData(context);
+    advancedStatusCheck(context, newVersion);
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotifactionViewModel>(context, listen: false).Refresh();
+    });
+
   }
+    @override
+    void didChangeAppLifecycleState(AppLifecycleState state) {
+      if (state == AppLifecycleState.resumed) {
+        // التطبيق رجع من الخلفية
+        print("🔄 App Resumed - Refreshing notifications");
+        NotifactionViewModel.instance.Refresh();
+      }
+    }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+
+
+    @override
   Widget build(BuildContext context) {
     return  FutureBuilder(
         future: _dataFuture,

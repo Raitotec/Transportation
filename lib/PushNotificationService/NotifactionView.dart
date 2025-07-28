@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/PushNotificationService/NotifactionViewModel.dart';
+import 'package:transportation/Shared_View/NoDataView.dart';
 
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
@@ -16,67 +18,58 @@ class NotificationsScreen extends StatefulWidget {
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
 
-class _NotificationsScreenState extends State<NotificationsScreen> {
-  late ScrollController _scrollController;
+class _NotificationsScreenState extends State<NotificationsScreen>  with WidgetsBindingObserver{
 
   @override
   void initState() {
     super.initState();
-
-    final vm = Provider.of<NotifactionViewModel>(context, listen: false);
-    vm.fetchNotifications(context);
-
-    _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      final vm = Provider.of<NotifactionViewModel>(context, listen: false);
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        if (!vm.isLoading && vm.currentPage <= vm.lastPage) {
-          vm.fetchNotifications(context,loadMore: true);
-        }
-      }
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotifactionViewModel>(context, listen: false).refresh();
     });
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // التطبيق رجع من الخلفية
+      print("🔄 App Resumed - Refreshing notifications");
+      NotifactionViewModel.instance.refresh();
+    }
   }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<NotifactionViewModel>(context);
     return Scaffold(
       appBar: AppBarWithBack(context, Translations.of(context)!.notification),
       drawer: DrawerList(context),
       backgroundColor: Colors.white,
-      body:Consumer<NotifactionViewModel>(
-        builder: (context, vm, child) {
-          return ListView.builder(
+      body: PagedListView<int, NotificationModel>(
+        pagingController: viewModel.pagingController,
+        builderDelegate: PagedChildBuilderDelegate<NotificationModel>(
+          itemBuilder: (context, item, index) => _tile(item, index, viewModel),
+          firstPageProgressIndicatorBuilder: (_) => Center(child:IconedButtonLoading()),
+          newPageProgressIndicatorBuilder: (_) => Center(child:IconedButtonLoading()),
+          firstPageErrorIndicatorBuilder: (_) => NoDataView(onTapped:()=> viewModel.Refresh()),
+          newPageErrorIndicatorBuilder: (_) => Center(child: Text(Translations.of(context)!.ErrorDes,style: Style.MainText14Bold,)),
+          noItemsFoundIndicatorBuilder: (_) => Center(
+            child: NoDataView(onTapped:()=> viewModel.Refresh()),
+          ),
+        ),
 
-            controller: _scrollController,
-            itemCount: vm.notifications.length + 1,
-            itemBuilder: (context, index) {
-              if (index == vm.notifications.length) {
-                return vm.isLoading
-                    ?  Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: IconedButtonLoading()),
-                )
-                    : SizedBox();
-              }
-
-              final notification = vm.notifications[index];
-              return _tile(notification, index, vm);
-            },
-          );
-        },
       ),
     );
   }
 
   _tile(NotificationModel data, int index, NotifactionViewModel viewModel) {
-    return Container(
+    return  InkWell(child:  Container(
         margin: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
         padding: EdgeInsets.symmetric(vertical: 1.0.h, horizontal: 2.0.w),
         decoration: BoxDecoration(
@@ -93,6 +86,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               title(data.message.toString()),
             ],
           ),
+         /* Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              title(data.id.toString()),
+            ],
+          ),*/
           //  Divider(height: 1.0.h, color: Style.SecondryColor, thickness: 0.5,),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -102,7 +102,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ],
           ),
 
-        ],));
+        ],)),onTap: ()=> viewModel.Read(data),);
   }
 
   title(String text) {

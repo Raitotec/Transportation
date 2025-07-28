@@ -58,7 +58,7 @@ Future<bool> ForFirebaseNotifyFun(BuildContext context,String employee_id , Stri
   }
 }
 
-Future<NotificationsResponse?> GetNotifications(BuildContext context, String page) async {
+Future<NotificationsResponse?> GetNotifications(String page) async {
   try {
     bool InternetConntected = await hasNetwork();
     if (InternetConntected) {
@@ -82,15 +82,11 @@ Future<NotificationsResponse?> GetNotifications(BuildContext context, String pag
           }
           else {
             if (valueMap['error'] != null) {
-              await AlertView(
-                  context, "error", Translations.of(context)!.ErrorTitle,
-                  valueMap['error'].toString());
+              //await AlertView(context, "error", Translations.of(context)!.ErrorTitle, valueMap['error'].toString());
             }
 
             else {
-              await AlertView(
-                  context, "error", Translations.of(context)!.ErrorTitle,
-                  valueMap['message'].toString());
+            //  await AlertView(context, "error", Translations.of(context)!.ErrorTitle, valueMap['message'].toString());
             }
             print(
                 "fn_GetOptionsFun400 ::: ${valueMap['message']} ${valueMap['data']}");
@@ -99,73 +95,77 @@ Future<NotificationsResponse?> GetNotifications(BuildContext context, String pag
         }
         else if (response.statusCode == 422) {
           Map valueMap = jsonDecode(response.body);
-          await AlertView(
-              context, "error", Translations.of(context)!.ErrorTitle,
-              valueMap['message'].toString());
+         // await AlertView(context, "error", Translations.of(context)!.ErrorTitle, valueMap['message'].toString());
           return null;
         }
         else {
-          await AlertView(
-              context, "error", Translations.of(context)!.ErrorTitle,
-              "error_statusCode ${response.statusCode} ${response
-                  .reasonPhrase} ");
+        //  await AlertView(context, "error", Translations.of(context)!.ErrorTitle, "error_statusCode ${response.statusCode} ${response.reasonPhrase} ");
           print("fn_GetOptionsFun_statusCode400 ::: ${response.statusCode} ");
           return null;
         }
       }
       catch (e) {
-        await AlertView(context, "error", Translations.of(context)!.ErrorTitle,
-            "Exception : ${e.toString()}");
+       // await AlertView(context, "error", Translations.of(context)!.ErrorTitle, "Exception : ${e.toString()}");
         print("fn_GetOptionsFun_Exception ::: ${e} ");
         return null;
       }
     }
     else {
-      await AlertView(context, "error", Translations.of(context)!.ErrorTitle,
-          Translations.of(context)!.CheckInternet);
+    //  await AlertView(context, "error", Translations.of(context)!.ErrorTitle, Translations.of(context)!.CheckInternet);
       print("fn_GetOptionsFun_Exception ::: checkInternet ");
       return null;
     }
   }
   catch (e) {
-    await AlertView(context, "error", Translations.of(context)!.ErrorTitle,
-        "Exception : ${e.toString()}");
+  //  await AlertView(context, "error", Translations.of(context)!.ErrorTitle, "Exception : ${e.toString()}");
     print("fn_GetOptionsFun_Exception ::: ${e} ");
     return null;
   }
 }
 
-
-Future<int?> Get_count_unread_notifications() async {
+Future<bool> NotificationRead( String id) async {
   try {
     bool InternetConntected = await hasNetwork();
     if (InternetConntected) {
-      final dataa = {
-        "lang": LanguageData.languageData,
-      };
-      Map<String, String> data = new Map<String, String>.from(dataa);
+      try {
+
+        var data = jsonEncode(<String, String>{
+          "lang": LanguageData.languageData,
+        });
 
 
-      final response = await Get_Data("getNotification", data);
-      print(response.body);
-      if (response.statusCode == 200) {
-        Map valueMap = jsonDecode(response.body);
-        if (valueMap['code'] == 200) {
-          print(
-              " fn_NotificationModel200 ::: ${valueMap['message']} ${valueMap['data']}");
-          if (valueMap['data'] != null) {
+        final response =await Post_Data("makeNotificationRead/"+id,data);
 
-            return valueMap['data']['count_unread_notifications'];
+        print(response.body);
+        if (response.statusCode == 200) {
+          Map valueMap = jsonDecode(response.body);
+          if (valueMap['code'] == 200) {
+            print( "ForFirebaseNotifyFun200 ::: ${valueMap['message']} ${valueMap['data']}");
+            return true;
           }
-          else
-            return null;
+          else {
+            print( "ForFirebaseNotifyFun400 ::: ${valueMap['message']} ${valueMap['data']}");
+            return false;
+          }
+        }
+        else {
+          print( "ForFirebaseNotifyFun400 ::: ${response.statusCode} ");
+          return false;
         }
       }
+      catch(e)
+      {
+        print( "ForFirebaseNotifyFunException ::: ${e} ");
+        return false;
+      }
+    }
+    else {
+      print("ForFirebaseNotifyFunException ::: checkInternet ");
+      return false;
     }
   }
   catch (e) {
-    print("fn_GetOptionsFun_Exception ::: ${e} ");
-    return null;
+    print("ForFirebaseNotifyFunException ::: ${e} ");
+    return false;
   }
 }
-

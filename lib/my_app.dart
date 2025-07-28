@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                                     create: (_) {
                                       final viewModel = NotifactionViewModel();
                                       NotifactionViewModel.setInstance(viewModel);
-                                      viewModel.RefreshCount();
+                                      viewModel.Refresh();
                                       return viewModel;
                                     }
                                 ),

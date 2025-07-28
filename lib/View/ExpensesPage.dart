@@ -7,15 +7,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
 import 'package:transportation/Models/OrderModel.dart';
 import 'package:transportation/ViewModel/ExpensesViewModel.dart';
+import '../Api/checkVersion.dart';
 import '../Constants/Localization/LanguageData.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
 import '../Models/PaymentMethodsData.dart';
+import '../PushNotificationService/NotifactionViewModel.dart';
 import '../Shared_View/AnimatedButton.dart';
 import '../Shared_View/AnimatedGridIcon.dart';
 import '../Shared_View/AppBarView.dart';
@@ -31,16 +34,39 @@ import '../Shared_View/dropdown.dart';
   _ExpensesPageState createState() => _ExpensesPageState();
   }
 
-  class _ExpensesPageState extends State<ExpensesPage> {
+  class _ExpensesPageState extends State<ExpensesPage> with WidgetsBindingObserver{
     late Future<void> _dataFuture;
+    final newVersion = NewVersionPlus();
 
-  @override
-  void initState() {
-    super.initState();
-    _dataFuture = Provider.of<ExpensesViewModel>(context, listen: false).GetData(context);
-  }
+    @override
+    void initState() {
+      super.initState();
 
-  @override
+      _dataFuture = Provider.of<ExpensesViewModel>(context, listen: false).GetData(context);
+      advancedStatusCheck(context, newVersion);
+      WidgetsBinding.instance.addObserver(this);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<NotifactionViewModel>(context, listen: false).Refresh();
+      });
+
+    }
+    @override
+    void didChangeAppLifecycleState(AppLifecycleState state) {
+      if (state == AppLifecycleState.resumed) {
+        // التطبيق رجع من الخلفية
+        print("🔄 App Resumed - Refreshing notifications");
+        NotifactionViewModel.instance.Refresh();
+      }
+    }
+
+    @override
+    void dispose() {
+      WidgetsBinding.instance.removeObserver(this);
+      super.dispose();
+    }
+
+
+    @override
   Widget build(BuildContext context) {
     return  FutureBuilder(
         future: _dataFuture,
