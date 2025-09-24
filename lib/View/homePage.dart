@@ -246,7 +246,7 @@ Widget ListData(List<Requests> lst) {
             Text(data.formattedTime.toString(),style:  Style.MainText16,),
           ],
         ),
-        if(viewModel.value == 0 )
+        if(viewModel.value != 2 )
         Row(
           children: [
             title(Translations.of(context)!.date2),

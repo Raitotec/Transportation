@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext contextt) {
     return
-           ResponsiveSizer(
+           Sizer(
                 builder: (context, orientation, deviceType) {
                   return  ScopedModelDescendant<AppModel>(
                       builder: (context, child, model) =>

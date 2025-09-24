@@ -102,9 +102,9 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                 Text(viewModel.currentRequest!.formattedTime.toString(), style: Style.MainText16,),
               ],
             ),
-            if(viewModel.value == 0 )
+            if(viewModel.value != 2 )
             SpaceRow(),
-            if(viewModel.value == 0 )
+            if(viewModel.value != 2 )
             Row(
               children: [
                 Icon_Title(Icons.calendar_month),

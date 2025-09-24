@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.21'
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
@@ -7,24 +7,61 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:8.0.2'  // Use an older version
+        classpath 'com.android.tools.build:gradle:8.7.0'
         classpath 'com.google.gms:google-services:4.3.13'
+    }
 
+    configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == "org.jetbrains.kotlin") {
+                details.useVersion "2.1.0"
+            }
+        }
     }
 }
+
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
+
+    subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty('android')) {
+                project.android {
+                    if (namespace == null) {
+                        namespace project.group
+                    }
+                }
+            }
+        }
+
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion "2.1.0"
+                }
+            }
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force "org.jetbrains.kotlin:kotlin-stdlib:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-reflect:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-stdlib-common:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-build-tools-api:2.1.0"
+            force "org.jetbrains.kotlin:kotlin-build-tools-impl:2.1.0"
+        }
+    }
 }
 
-rootProject.buildDir = "../build"
+rootProject.buildDir = '../build'
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
+    project.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {

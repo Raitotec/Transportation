@@ -67,7 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "delivery_add_attachment": MessageLookupByLibrary.simpleMessage("ڈیلیوری منسلکہ شامل کریں۔"),
     "enterData": MessageLookupByLibrary.simpleMessage("تمام ڈیٹا درج کریں۔"),
     "notification":MessageLookupByLibrary.simpleMessage("اطلاع"),
-    "date1":MessageLookupByLibrary.simpleMessage("Request Date"),
-    "date2":MessageLookupByLibrary.simpleMessage("Delivery Date"),
+    "date1":MessageLookupByLibrary.simpleMessage("درخواست کی تاریخ"),
+    "date2":MessageLookupByLibrary.simpleMessage("ڈیلیوری کی تاریخ"),
   };
 }
