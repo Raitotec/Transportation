@@ -69,20 +69,21 @@ class ExpensesViewModel extends ChangeNotifier {
     catch (e) {
       _isLoading = false;
     }
-
-    var y = await GetExpenseTypesFun(context);
-    if (y != null && y.isNotEmpty) {
-      _MyPaymentMethodsList = y;
+    if(MyPaymentMethodsList.isEmpty) {
+      var y = await GetExpenseTypesFun(context);
+      if (y != null && y.isNotEmpty) {
+        _MyPaymentMethodsList = y;
+      }
     }
 
     _isLoading = false;
   }
   Future<void> Get_Data() async {
     _isLoading = true;
-    _SelectedPaymentMethods=null;
-    _AmountController.clear();
-    _images_invoice = <File>[];
-    _images_path_invoice=<String>[];
+   // _SelectedPaymentMethods=null;
+   // _AmountController.clear();
+   // _images_invoice = <File>[];
+  //  _images_path_invoice=<String>[];
     notifyListeners();
     try {
       var x = await GetRequet_Fun();
@@ -98,12 +99,12 @@ class ExpensesViewModel extends ChangeNotifier {
     catch (e) {
       _isLoading = false;
     }
-
-    var y = await GetExpenseTypes_Fun();
-    if (y != null && y.isNotEmpty) {
-      _MyPaymentMethodsList = y;
+    if(MyPaymentMethodsList.isEmpty) {
+      var y = await GetExpenseTypes_Fun();
+      if (y != null && y.isNotEmpty) {
+        _MyPaymentMethodsList = y;
+      }
     }
-
     _isLoading = false;
     notifyListeners();
   }
@@ -166,10 +167,10 @@ class ExpensesViewModel extends ChangeNotifier {
   Future<void> pickImages(bool load) async {
     try {
 
-      _isLoading=true;
+     // _isLoading=true;
       _images_invoice = <File>[];
       _images_path_invoice=<String>[];
-      notifyListeners();
+     // notifyListeners();
       ImagePicker _picker = ImagePicker();
       XFile? resultList = await _picker.pickImage(source: ImageSource.camera);
       print(resultList!.path);
@@ -180,10 +181,8 @@ class ExpensesViewModel extends ChangeNotifier {
         _images_invoice.add(File(compress_File!.path));
         _images_path_invoice.add(compress_File.path);
       }
-      else
-        {
-        }
-      _isLoading=false;
+
+     // _isLoading=false;
       notifyListeners();
     }
     catch (e) {

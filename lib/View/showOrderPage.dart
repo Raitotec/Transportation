@@ -8,12 +8,13 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:full_screen_image/full_screen_image.dart';
+
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Models/OrderModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Constants/Localization/Translations.dart';
 import '../Constants/Style.dart';
 import '../Shared_View/AnimatedButton.dart';
@@ -24,6 +25,10 @@ import '../Shared_View/NoDataView.dart';
 import '../Shared_View/ProgressIndicatorButton.dart';
 import '../Shared_View/_buildLoadingScaffold.dart';
 import '../ViewModel/HomeViewModel.dart';
+import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:sizer/sizer.dart'; // لو كنتي بتستخدمي sizer في المشروع
+
 
 class ShowOrderPage extends StatefulWidget {
 
@@ -74,7 +79,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
     return Consumer<HomeViewModel>(
         builder: (context, viewModel, child)
     {
-      return Column(children: [ Container(
+      return SingleChildScrollView(child:  Column(children: [ Container(
           margin: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 2.0.w),
           padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 2.0.w),
           decoration: BoxDecoration(
@@ -168,22 +173,29 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
               SpaceRow(),
             if(viewModel.value == 0 )
               Row(mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                  Expanded(child:   Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon_Title(Icons.add_a_photo_outlined),
+                        title(Translations.of(context)!
+                            .aramco_add_attachment),
+
+                      ],
+                    )),
+                  ElevatedButton(
+                      onPressed: () async {
+                        await viewModel.pickImages(true);
+                      },
+                      child:Text( Translations.of(context)!.load_pic,style: Style.MainText14Bold,), // حجم تأثير الضغط
+                    ),
+                  ]),
+            if(viewModel.value == 0 )
+              Row(mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                        onTap: () async {
-                          await viewModel.pickImages(true);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon_Title(Icons.add_a_photo_outlined),
-                            title(Translations.of(context)!
-                                .aramco_add_attachment),
-
-                          ],
-                        )),
                     ShowImages(
                         viewModel.images_load, viewModel.images_path_load),
                   ]),
@@ -192,29 +204,34 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
             if(viewModel.value == 0 )
               Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                        onTap: () async {
-                          await viewModel.pickImages(false);
-                        },
-                        child: Row(
-
+                   Expanded(child:  Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Icon_Title(Icons.add_a_photo_outlined),
                             title(Translations.of(context)!
                                 .delivery_add_attachment),
-
                           ],
                         )),
-                    ShowImages(
-                        viewModel.images_delivery,
-                        viewModel.images_path_delivery)
-                  ]),
-            SpaceRow(),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await viewModel.pickImages(false);
+                      },
+                      child:Text( Translations.of(context)!.load_pic,style: Style.MainText14Bold,), // حجم تأثير الضغط
+                    ),
 
+                  ]),
+            if(viewModel.value == 0 )
+            Row(mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShowImages(
+                      viewModel.images_delivery, viewModel.images_path_delivery),
+                ]),
+            if(viewModel.value == 0 )
+            SpaceRow(),
             Row(
                 children: [
                   Expanded(child: InkWell(onTap: () async {
@@ -292,7 +309,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
                           fontWeight: FontWeight.bold),),
                   )
                 ],)
-          ],))]);
+          ],))]));
     });
   }
   title(String text)
@@ -313,105 +330,267 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
   {
     return SizedBox(height: 1.2.h,);
   }
-  ShowImages(  List<File> images,List<String> path)
-  {
-    return   Expanded(
-        child: Container(
-            height: (images != null && images.length > 0) ? 8.0.h : 2.0.h,
-            child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
 
-                  if(images != null && images.length > 0)
-                    Expanded(
-                      child: Container(
-                          height:10.0.h,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: images.length,
-                            itemBuilder: (ctx, i) =>
-                                MainCategoryShape(images[i],images),
-                          )
 
-                      ),
-                    ),
-                  Container(),
-                ])));
-  }
 
-  ShowImagesNetwork(  List<String> images)
-  {
-    return   Container(
-            height: (images != null && images.length > 0) ? 8.0.h : 2.0.h,
-            child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-
-                  if(images != null && images.length > 0)
-                    Expanded(
-                      child: Container(
-                          height:10.0.h,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: images.length,
-                            itemBuilder: (ctx, i) =>
-                                smallImage(images[i]),
-                          )
-
-                      ),
-                    ),
-                  Container(),
-                ]));
-  }
-
-  Widget smallImage(String? img) {
+  ShowImagesNetwork(List<String> attachments) {
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 2.0.w),
-     //   decoration: Style.Glass2BoxDecoration,
-        child:  FullScreenWidget(
-        disposeLevel: DisposeLevel.High,
-        child: Center(child: Hero(tag: img!, child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Image.network(img!,fit: BoxFit.cover,
-            )),
-
-        ),
-        )));
-  }
-
-  MainCategoryShape(File _imageFileList, List<File> images) {
-    return Container(
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-    child: ClipRRect(
-    borderRadius: BorderRadius.circular(5),
-    child: Stack(
-          children: [
-            /*  AssetThumb(
-              width: (10.0.w).toInt(),
-              height: (10.0.h).toInt(),
-              asset: asset,
-            ),*/
-    FullScreenWidget(
-    disposeLevel: DisposeLevel.High,
-    child: Center(child: Hero(tag: "tag", child:  Image.file(File(_imageFileList.path),),))),
-            Align(
-              alignment: Alignment.topRight,
-              child: InkWell(
-                child: Icon(Icons.highlight_remove_outlined, color: Colors.red,),
-                onTap: () {
-                  setState(() {
-                    images.remove(_imageFileList);
-                  });
-                },
+      height: (attachments != null && attachments.isNotEmpty) ? 8.0.h : 2.0.h,
+      decoration: Style.Glass7BoxDecoration,
+      child: Column(
+        children: [
+          if (attachments != null && attachments.isNotEmpty)
+            Expanded(
+              child: Container(
+                height: 10.0.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: attachments.length,
+                  itemBuilder: (ctx, i) {
+                    final item = attachments[i];
+                    if ( _isImage(item)) {
+                      // 🔸 لو صورة
+                      return smallImage(item);
+                    } else {
+                      // 🔸 لو مرفق PDF أو أي نوع آخر
+                      return _buildFileAttachment(item);
+                    }
+                  },
+                ),
               ),
             ),
+          Container(),
+        ],
+      ),
+    );
+  }
+  bool _isImage(String url) {
+    final lower = url.toLowerCase();
+    return lower.endsWith('.png') ||
+        lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.gif') ||
+        lower.endsWith('.bmp') ||
+        lower.endsWith('.webp');
+  }
+  Widget _buildFileAttachment(String item) {
+    String fileName = '';
+    fileName = Uri.decodeFull(item.split('/').last);
+
+    return GestureDetector(
+      onTap: () async {
+        // هنا تقدر تفتحي الملف مثلا
+        print('Open file: $item');
+        final Uri url = Uri.parse(item);
+
+        if (!await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication, // يفتح في المتصفح
+        )) {
+        throw 'Could not open $item';
+        }
+      },
+      child: Container(
+        width: 20.0.w,
+        margin: EdgeInsets.symmetric(horizontal: 1.0.w),
+        padding: EdgeInsets.all(2.0.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.shade400),
+          color: Colors.grey.shade100,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.attach_file, size:3.0.h, color: Colors.redAccent),
+            SizedBox(height: 0.5.h,),
+            Text("مرفق",style: Style.MainText14,)
           ],
-        )
-    ));
+        ),
+      ),
+    );
   }
 
 
 
+  Widget smallImage( String? img) {
+    if (img == null || img.isEmpty) {
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 2.0.w),
+        width: 20.0.w,
+        height: 10.0.h,
+        color: Colors.grey.shade300,
+        child: Icon(Icons.broken_image, color: Colors.grey, size: 24.sp),
+      );
+    }
+
+    return GestureDetector(
+      onTap: () {
+        // لما تضغطي على الصورة، تفتح fullscreen بزوم
+        showDialog(
+          context: context,
+          builder: (_) => Dialog(
+            backgroundColor: Colors.black,
+            insetPadding: EdgeInsets.zero,
+            child: Stack(
+              children: [
+                PhotoView(
+                  imageProvider: NetworkImage(img),
+                  backgroundDecoration:
+                  const BoxDecoration(color: Colors.black),
+                  minScale: PhotoViewComputedScale.contained,
+                  maxScale: PhotoViewComputedScale.covered * 3,
+                ),
+                Positioned(
+                  top: 30,
+                  right: 20,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white, size: 28),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: 20.0.w,
+        margin: EdgeInsets.symmetric(horizontal: 1.0.w),
+    //    padding: EdgeInsets.all(2.0.w),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.shade400),
+          color: Colors.grey.shade100,
+        ),
+        child: Hero(
+        tag: img,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.network(
+            img,
+            fit: BoxFit.cover,
+            width: 25.0.w,
+            height: 10.0.h,
+            errorBuilder: (context, error, stackTrace) =>
+                Icon(Icons.error, color: Colors.redAccent),
+            loadingBuilder: (context, child, progress) {
+              if (progress == null) return child;
+              return Center(
+                child: SizedBox(
+                  width: 16.sp,
+                  height: 16.sp,
+                  child: const CircularProgressIndicator(strokeWidth: 1.5),
+                ),
+              );
+            },
+          ),
+        ),
+      )),
+    );
+  }
+
+  Widget ShowImages(List<File> files, List<String> filePaths) {
+    if (files.isEmpty) return const SizedBox(); // لو مفيش صور
+
+    return Flexible(
+      child: Container(
+        height: 8.0.h,
+        decoration: Style.Glass7BoxDecoration,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: files.length,
+          itemBuilder: (ctx, i) {
+            final file = files[i];
+
+            return Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: ctx,
+                      builder: (_) => Dialog(
+                        backgroundColor: Colors.black,
+                        insetPadding: EdgeInsets.zero,
+                        child: Stack(
+                          children: [
+                            PhotoView(
+                              imageProvider: FileImage(file),
+                              backgroundDecoration:
+                              const BoxDecoration(color: Colors.black),
+                              minScale: PhotoViewComputedScale.contained,
+                              maxScale: PhotoViewComputedScale.covered * 3,
+                            ),
+                            Positioned(
+                              top: 40,
+                              right: 20,
+                              child: IconButton(
+                                icon: const Icon(Icons.close,
+                                    color: Colors.white, size: 30),
+                                onPressed: () => Navigator.of(ctx).pop(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  child:  Container(
+                  width: 20.0.w,
+                  margin: EdgeInsets.symmetric(horizontal: 1.0.w),
+                  //    padding: EdgeInsets.all(2.0.w),
+                  decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.grey.shade400),
+                  color: Colors.grey.shade100,
+                  ),
+                  child: Image.file(
+                        file,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: Colors.grey.shade200,
+                          child: const Icon(Icons.broken_image, color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                ),
+
+                Positioned(
+                  top: 0,
+                  right: 5,
+                  child: InkWell(
+                    onTap: () {
+
+                      setState(() {
+                        if (i >= 0 && i < files.length) {
+                          files.removeAt(i);
+                        }
+                        if (i >= 0 && i < filePaths.length) {
+                          filePaths.removeAt(i);
+                        }
+                      });
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white30,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(2),
+                      child: const Icon(
+                        Icons.highlight_remove_outlined,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
 
   sureDialog(Requests data, HomeViewModel viewModel) {
     return Alert(
@@ -445,9 +624,6 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
         )
     ).show();
   }
-
-
-
 
 
 }

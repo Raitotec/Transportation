@@ -54,6 +54,7 @@ class PushNotificationService {
             platformChannelSpecifics,
           );
         }
+        print("***************Hiiiiiiiiiiiiiiiiiii");
         NotifactionViewModel.instance.Refresh();
         ExpensesViewModel.instance.Get_Data();
         HomeViewModel.instance.Get_Data();

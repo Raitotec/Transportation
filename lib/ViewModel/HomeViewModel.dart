@@ -63,7 +63,7 @@ class HomeViewModel extends ChangeNotifier {
   Requests? get currentRequest => _currentRequest;
 
   Future<void> GetData(BuildContext context) async {
-
+    print("********************GetHoome");
     checkVersionFun(context);
     _isLoading = true;
     _images_load = <File>[];
@@ -103,13 +103,13 @@ class HomeViewModel extends ChangeNotifier {
     _isLoading = false;
   }
   Future<void> Get_Data() async {
-
+    print("********************GetHoome2");
     _isLoading = true;
-    _images_load = <File>[];
-    _images_path_load = <String>[];
-    _images_delivery = <File>[];
-    _images_path_delivery = <String>[];
-    _CurrentItems = _LaterItems = _EndItems = [];
+   // _images_load = <File>[];
+  //  _images_path_load = <String>[];
+   // _images_delivery = <File>[];
+   // _images_path_delivery = <String>[];
+   // _CurrentItems = _LaterItems = _EndItems = [];
     notifyListeners();
     try {
       var x = await GetRequet_Fun();
@@ -221,7 +221,7 @@ class HomeViewModel extends ChangeNotifier {
   Future<void> pickImages(bool load) async {
     try {
 
-      _isLoading=true;
+     _isLoading=true;
       notifyListeners();
       ImagePicker _picker = ImagePicker();
       XFile? resultList = await _picker.pickImage(source: ImageSource.camera);
@@ -235,9 +235,12 @@ class HomeViewModel extends ChangeNotifier {
       }
       else
         {
+          print("&&&&");
+          print(compress_File!.path);
           _images_delivery.add(File(compress_File!.path));
           _images_path_delivery.add(compress_File.path);
         }
+     print("*******************Pic");
       _isLoading=false;
       notifyListeners();
     }

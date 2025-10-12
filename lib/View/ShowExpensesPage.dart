@@ -8,8 +8,8 @@ import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:full_screen_image/full_screen_image.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:transportation/Constants/Routes/route_constants.dart';
@@ -148,26 +148,35 @@ import '../Shared_View/dropdown.dart';
                       ],),
                       //padding: EdgeInsets.symmetric(horizontal: 3.0.w),
                       SpaceRow(),
-                      Row(mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InkWell(
-                                onTap: () async {
+
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(child:  Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon_Title(Icons.add_a_photo_outlined),
+                                  title(Translations.of(context)!
+                                      .invoice_attachment),
+                                ],
+                              )),
+                              ElevatedButton(
+                                onPressed: () async {
                                   await viewModel.pickImages(true);
                                 },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon_Title(Icons.add_a_photo_outlined),
-                                    title(Translations.of(context)!
-                                        .invoice_attachment),
+                                child:Text( Translations.of(context)!.load_pic,style: Style.MainText14Bold,), // حجم تأثير الضغط
+                              ),
 
-                                  ],
-                                )),
-                            ShowImages(viewModel.images_invoice,
-                                viewModel.images_path_invoice),
-                          ]),
+                            ]),
+
+                        Row(mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ShowImages(viewModel.images_invoice,
+                                  viewModel.images_path_invoice),
+                            ]),
                       SizedBox(height: 2.0.h,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -225,61 +234,106 @@ import '../Shared_View/dropdown.dart';
   }
 
 
-  ShowImages(  List<File> images,List<String> path)
-  {
-    return   Expanded(
-        child: Container(
-            height: (images != null && images.length > 0) ? 8.0.h : 2.0.h,
-            child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+  Widget ShowImages(List<File> files, List<String> filePaths) {
+    if (files.isEmpty) return const SizedBox(); // لو مفيش صور
 
-                  if(images != null && images.length > 0)
-                    Expanded(
-                      child: Container(
-                          height:10.0.h,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: images.length,
-                            itemBuilder: (ctx, i) =>
-                                MainCategoryShape(images[i],images),
-                          )
+    return Flexible(
+      child: Container(
+        height: 8.0.h,
+        decoration: Style.Glass7BoxDecoration,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: files.length,
+          itemBuilder: (ctx, i) {
+            final file = files[i];
 
+            return Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: ctx,
+                      builder: (_) => Dialog(
+                        backgroundColor: Colors.black,
+                        insetPadding: EdgeInsets.zero,
+                        child: Stack(
+                          children: [
+                            PhotoView(
+                              imageProvider: FileImage(file),
+                              backgroundDecoration:
+                              const BoxDecoration(color: Colors.black),
+                              minScale: PhotoViewComputedScale.contained,
+                              maxScale: PhotoViewComputedScale.covered * 3,
+                            ),
+                            Positioned(
+                              top: 40,
+                              right: 20,
+                              child: IconButton(
+                                icon: const Icon(Icons.close,
+                                    color: Colors.white, size: 30),
+                                onPressed: () => Navigator.of(ctx).pop(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  child:  Container(
+                    width: 20.0.w,
+                    margin: EdgeInsets.symmetric(horizontal: 1.0.w),
+                    //    padding: EdgeInsets.all(2.0.w),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade400),
+                      color: Colors.grey.shade100,
+                    ),
+                    child: Image.file(
+                      file,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: Colors.grey.shade200,
+                        child: const Icon(Icons.broken_image, color: Colors.grey),
                       ),
                     ),
-                  Container(),
-                ])));
-  }
+                  ),
+                ),
 
-
-  MainCategoryShape(File _imageFileList, List<File> images) {
-    return Container(
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Stack(
-              children: [
-                /*  AssetThumb(
-              width: (10.0.w).toInt(),
-              height: (10.0.h).toInt(),
-              asset: asset,
-            ),*/
-                FullScreenWidget(
-                    disposeLevel: DisposeLevel.High,
-                    child: Center(child: Hero(tag: "tag", child:  Image.file(File(_imageFileList.path),),))),
-                Align(
-                  alignment: Alignment.topRight,
+                Positioned(
+                  top: 0,
+                  right: 5,
                   child: InkWell(
-                    child: Icon(Icons.highlight_remove_outlined, color: Colors.red,),
                     onTap: () {
+
                       setState(() {
-                        images.remove(_imageFileList);
+                        if (i >= 0 && i < files.length) {
+                          files.removeAt(i);
+                        }
+                        if (i >= 0 && i < filePaths.length) {
+                          filePaths.removeAt(i);
+                        }
                       });
                     },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white30,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(2),
+                      child: const Icon(
+                        Icons.highlight_remove_outlined,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                    ),
                   ),
                 ),
               ],
-            )
-        ));
+            );
+          },
+        ),
+      ),
+    );
   }
+
 }

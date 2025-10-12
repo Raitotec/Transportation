@@ -69,5 +69,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "notification":MessageLookupByLibrary.simpleMessage("الاشعارات"),
     "date1":MessageLookupByLibrary.simpleMessage("تاريخ الطلب "),
     "date2":MessageLookupByLibrary.simpleMessage("تاريخ التسليم "),
+    "load_pic":MessageLookupByLibrary.simpleMessage("تحميل الصورة"),
   };
 }

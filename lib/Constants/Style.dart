@@ -144,7 +144,7 @@ class Style {
   );
   static BoxDecoration Glass7BoxDecoration = BoxDecoration(
     color: Colors.white.withOpacity(0.7),
-    border: Border.all(color: Colors.white, width: 1.0),
+    border: Border.all(color: Colors.black12, width: 1.0),
     borderRadius: new BorderRadius.only(
       topLeft: const Radius.circular(5.0),
       topRight: const Radius.circular(5.0),
