@@ -411,8 +411,6 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
     );
   }
 
-
-
   Widget smallImage( String? img) {
     if (img == null || img.isEmpty) {
       return Container(
@@ -606,7 +604,7 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
           ),
           onPressed: () async {
             Navigator.pop(context);
-            await viewModel.sendRequest(context);},
+            showFuelDialog(viewModel);},
           color: Colors.black12,
         ),
         DialogButton(
@@ -622,6 +620,49 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
           titleStyle:  Style.MainText16Bold,
           descStyle:  Style.MainText16Bold,
         )
+    ).show();
+  }
+  void showFuelDialog(HomeViewModel viewModel) {
+    TextEditingController fuelController = TextEditingController();
+    Alert(
+      context: context,
+      title: Translations.of(context)!.actual_fuel_quantity,
+      content: Column(
+        children: [
+          TextField(
+            controller: fuelController,
+            keyboardType:
+            TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(
+              hintText: "ادخل الكمية",
+              suffixText: "لتر",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          child: Text("إلغاء", style: Style.MainText16Bold),
+          onPressed: () => Navigator.pop(context),
+          color: Style.SecondryColor,
+        ),
+        DialogButton(
+          child: Text("حفظ", style: Style.MainText16Bold),
+          onPressed: () async {
+            if (fuelController.text.isEmpty) return;
+
+            double fuel =
+                double.tryParse(fuelController.text) ?? 0;
+
+            Navigator.pop(context);
+
+            // هنا بنبعت الكمية مع إنهاء الطلب
+            await viewModel.endRequest(context, fuel);
+          },
+          color: Colors.black12,
+        ),
+      ],
     ).show();
   }
 

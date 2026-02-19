@@ -70,5 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "date1":MessageLookupByLibrary.simpleMessage("تاريخ الطلب "),
     "date2":MessageLookupByLibrary.simpleMessage("تاريخ التسليم "),
     "load_pic":MessageLookupByLibrary.simpleMessage("تحميل الصورة"),
+    "actual_fuel_quantity":MessageLookupByLibrary.simpleMessage("إدخال كمية الوقود الفعلية"),
+    "actual_quantity":MessageLookupByLibrary.simpleMessage("إدخل كمية"),
+    "liter":MessageLookupByLibrary.simpleMessage("لتر"),
   };
 }

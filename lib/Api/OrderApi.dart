@@ -241,7 +241,10 @@ Future<Requests?> addRequetFun(BuildContext context,String id , List<String>? su
   }
 }
 
-Future<Requests?> endRequetFun(BuildContext context,String id , List<String>? supplierLoadingRequestAttachments, List<String>? loadingPermission_attachments) async {
+Future<Requests?> endRequetFun(BuildContext context,String id ,
+    List<String>? supplierLoadingRequestAttachments,
+    List<String>? loadingPermission_attachments,
+    String actual_quantity) async {
   try {
     bool InternetConntected = await hasNetwork();
     if (InternetConntected) {
@@ -258,6 +261,7 @@ Future<Requests?> endRequetFun(BuildContext context,String id , List<String>? su
             "POST", UriData);
         request.headers.addAll(headers);
         request.fields['id'] = id;
+        request.fields['actual_quantity'] = actual_quantity;
         if (supplierLoadingRequestAttachments != null &&
             supplierLoadingRequestAttachments.isNotEmpty) {
           for (int i = 0; i < supplierLoadingRequestAttachments.length; i++) {

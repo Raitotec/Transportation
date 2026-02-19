@@ -386,6 +386,13 @@ class Translations {
       'load_pic',
       name: 'load_pic',
     );
-}
+  }
+
+  String get actual_fuel_quantity {
+    return Intl.message(
+      'actual_fuel_quantity',
+      name: 'actual_fuel_quantity',
+    );
+  }
 }
 

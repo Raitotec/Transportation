@@ -70,5 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "date1":MessageLookupByLibrary.simpleMessage("درخواست کی تاریخ"),
     "date2":MessageLookupByLibrary.simpleMessage("ڈیلیوری کی تاریخ"),
     "load_pic":MessageLookupByLibrary.simpleMessage("ڈاؤن لوڈ"),
+    "actual_fuel_quantity":MessageLookupByLibrary.simpleMessage("ایندھن کی اصل مقدار درج کریں۔"),
+    "actual_quantity":MessageLookupByLibrary.simpleMessage("مقدار درج کریں۔"),
+    "liter":MessageLookupByLibrary.simpleMessage("لیٹر"),
   };
 }

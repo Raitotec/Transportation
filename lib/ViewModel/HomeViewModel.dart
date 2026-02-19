@@ -318,11 +318,12 @@ class HomeViewModel extends ChangeNotifier {
     _isLoading=false;
     notifyListeners();
   }
- Future<void> sendRequest( BuildContext context) async {
+ Future<void> endRequest( BuildContext context, double fuel) async {
     _isLoading=true;
     notifyListeners();
 
-    var x= await endRequetFun(context, currentRequest!.id.toString(), images_path_load,images_path_delivery);
+    var x= await endRequetFun(context, currentRequest!.id.toString(),
+        images_path_load,images_path_delivery,fuel.toString());
     if(x != null)
     {
       /*_currentRequest= x;
