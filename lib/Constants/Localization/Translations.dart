@@ -394,5 +394,17 @@ class Translations {
       name: 'actual_fuel_quantity',
     );
   }
+  String get actual_quantity {
+    return Intl.message(
+      'actual_quantity',
+      name: 'actual_quantity',
+    );
+  }
+  String get liter {
+    return Intl.message(
+      'liter',
+      name: 'liter',
+    );
+  }
 }
 

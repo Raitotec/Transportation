@@ -23,6 +23,7 @@ import '../Shared_View/BackgroundView.dart';
 import '../Shared_View/DrawerView.dart';
 import '../Shared_View/NoDataView.dart';
 import '../Shared_View/ProgressIndicatorButton.dart';
+import '../Shared_View/TextFieldNumber.dart';
 import '../Shared_View/_buildLoadingScaffold.dart';
 import '../ViewModel/HomeViewModel.dart';
 import 'package:flutter/material.dart';
@@ -629,26 +630,25 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
       title: Translations.of(context)!.actual_fuel_quantity,
       content: Column(
         children: [
-          TextField(
-            controller: fuelController,
-            keyboardType:
-            TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              hintText: "ادخل الكمية",
-              suffixText: "لتر",
-              border: OutlineInputBorder(),
-            ),
-          ),
+          SizedBox(height: 1.5.h,),
+
+          Row(children: [
+            Icon_Title(Icons.local_gas_station),
+            title(Translations.of(context)!.actual_quantity),
+            Expanded(child: TextFieldNumber(
+              controller:fuelController,
+              onChanged: (String value) async {
+              }
+              , textAlign: TextAlign.start,
+              vertical: 1.0.h,
+            ),)
+          ],),
+          SizedBox(height: 1.0.h,),
         ],
       ),
       buttons: [
         DialogButton(
-          child: Text("إلغاء", style: Style.MainText16Bold),
-          onPressed: () => Navigator.pop(context),
-          color: Style.SecondryColor,
-        ),
-        DialogButton(
-          child: Text("حفظ", style: Style.MainText16Bold),
+          child: Text(Translations.of(context)!.okey, style: Style.MainText16Bold),
           onPressed: () async {
             if (fuelController.text.isEmpty) return;
 
@@ -662,7 +662,17 @@ class _ShowOrderPageState extends State<ShowOrderPage> {
           },
           color: Colors.black12,
         ),
+        DialogButton(
+          child: Text(Translations.of(context)!.no, style: Style.MainText16Bold),
+          onPressed: () => Navigator.pop(context),
+          color: Style.SecondryColor,
+        ),
+
       ],
+        style: AlertStyle(overlayColor:  Colors.black54,
+          titleStyle:  Style.MainText16Bold,
+          descStyle:  Style.MainText16Bold,
+        )
     ).show();
   }
 
